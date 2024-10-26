@@ -521,7 +521,7 @@ class Call(PyTgCalls):
                     db[chat_id][0]["markup"] = "tg"
                 else:
                     button = stream_markup(_, chat_id)
-                    run = await app.send_photo(
+                    run = await app.send_message(
                         chat_id=original_chat_id,
                         caption=_["stream_1"].format(
                             f"https://t.me/{app.username}?start=info_{videoid}",
