@@ -1,8 +1,9 @@
 import asyncio
 import importlib
-
+from flask import Flask
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
+from threading import Thread
 
 import config
 from BABYMUSIC import LOGGER, app, userbot
@@ -12,6 +13,12 @@ from BABYMUSIC.plugins import ALL_MODULES
 from BABYMUSIC.utils.database import get_banned_users, get_gbanned
 from config import BANNED_USERS
 
+# Flask app initialize
+flask_app = Flask(__name__)
+
+@flask_app.route('/')
+def home():
+    return "BabyMusic bot is running!"
 
 async def init():
     if (
@@ -57,6 +64,13 @@ async def init():
     await userbot.stop()
     LOGGER("BABYMUSIC").info("𝗦𝗧𝗢𝗣 𝗕𝗔𝗕𝗬 𝗠𝗨𝗦𝗜𝗖🎻 𝗕𝗢𝗧..")
 
+def start_flask():
+    flask_app.run(host="0.0.0.0", port=8000)
 
 if __name__ == "__main__":
-    asyncio.get_event_loop().run_until_complete(init())
+    # Start Flask in a separate thread
+    flask_thread = Thread(target=start_flask)
+    flask_thread.start()
+    
+    # Start the bot loop
+    asyncio.run(init())
