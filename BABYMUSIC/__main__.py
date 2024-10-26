@@ -3,7 +3,6 @@ import importlib
 from flask import Flask
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
-from threading import Thread
 import config
 from BABYMUSIC import LOGGER, app, userbot
 from BABYMUSIC.core.call import BABY
@@ -70,14 +69,18 @@ async def init():
     except Exception as e:
         LOGGER(__name__).error(f"Error during bot initialization: {e}")
     finally:
-        # Ensure proper shutdown
-        await app.stop()
-        await userbot.stop()
-        LOGGER("BABYMUSIC").info("BabyMusic bot stopped.")
+        await shutdown()
 
-        # Ensure client session is closed properly
-        if hasattr(app, 'client') and app.client is not None:
-            await app.client.close()
+async def shutdown():
+    LOGGER("BABYMUSIC").info("Shutting down the bot...")
+    await app.stop()
+    await userbot.stop()
+    await BABY.stop()
+    LOGGER("BABYMUSIC").info("BabyMusic bot stopped.")
+
+    # Ensure client session is closed properly
+    if hasattr(app, 'client') and app.client is not None:
+        await app.client.close()
 
 async def start_flask():
     flask_app.run(host="0.0.0.0", port=8000)
@@ -93,5 +96,9 @@ if __name__ == "__main__":
     except Exception as e:
         LOGGER(__name__).error(f"Error in main execution: {e}")
     finally:
+        # Allow pending tasks to finish
+        pending = asyncio.all_tasks(loop)
+        for task in pending:
+            task.cancel()
         loop.run_until_complete(loop.shutdown_asyncgens())
         loop.close()
