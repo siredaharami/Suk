@@ -65,7 +65,7 @@ async def init():
             # Start stream call
             await BABY.stream_call("https://te.legra.ph/file/29f784eb49d230ab62e9e.mp4")
         except NoActiveGroupCall:
-            LOGGER("BABYMUSIC").error("𝗣𝗹𝗭 𝗦𝗧𝗔𝗥𝗧 𝗬𝗢𝗨𝗥 𝗟𝗢𝗚 𝗚𝗥𝗢𝗨𝗣 𝗩𝗢𝗜𝗖𝗘𝗖𝗛𝗔𝗧\𝗖𝗛𝗔𝗡𝗡𝗘𝗟\n\n𝗕𝗔𝗕𝗬𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧 𝗦𝗧𝗢𝗣........")
+            LOGGER("BABYMUSIC").error("𝗣𝗹𝗫 𝗦𝗧𝗔𝗥𝗧 𝗬𝗢𝗨𝗥 𝗟𝗢𝗚 𝗚𝗥𝗢𝗨𝗣 𝗩𝗢𝗜𝗖𝗘𝗖𝗛𝗔𝗧\𝗖𝗛𝗔𝗡𝗡𝗘𝗟\n\n𝗕𝗔𝗕𝗬𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧 𝗦𝗧𝗢𝗣........")
             return
         except Exception as e:
             LOGGER("BABYMUSIC").error(f"Error starting stream call: {e}")
@@ -106,6 +106,9 @@ def start_flask():
     flask_app.run(host="0.0.0.0", port=8000)
 
 if __name__ == "__main__":
+    # Set the event loop for the main thread
+    asyncio.set_event_loop(asyncio.new_event_loop())
+    
     # Start Flask in a separate thread
     Thread(target=start_flask).start()
     
