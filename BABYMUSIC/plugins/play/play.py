@@ -639,11 +639,11 @@ async def slider_queries(client, CallbackQuery, _):
 
         
 
-        try:
-            text_message = _["play_10"].format(title.title(), duration_min)
+try:
+    text_message = _["play_10"].format(title.title(), duration_min)
     print("play_10 text formatted correctly:", text_message)
-            except KeyError as e:
-                print(f"KeyError encountered in play_10: {e}")
+except KeyError as e:
+    print(f"KeyError encountered in play_10: {e}")
 
 
     # For "Backward" query
@@ -673,4 +673,4 @@ except KeyError as e:
         return await CallbackQuery.edit_message_text(
             text=text_message,
             reply_markup=InlineKeyboardMarkup(buttons)
-                )
+    )
