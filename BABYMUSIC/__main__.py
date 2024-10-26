@@ -75,6 +75,7 @@ async def init():
         await userbot.stop()
         LOGGER("BABYMUSIC").info("BabyMusic bot stopped.")
         
+        # Ensure client session is closed properly
         if hasattr(app, 'client') and app.client is not None:
             await app.client.close()
 
@@ -83,6 +84,10 @@ async def start_flask():
 
 if __name__ == "__main__":
     try:
-        asyncio.run(asyncio.gather(init(), start_flask()))
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(asyncio.gather(init(), start_flask()))
     except Exception as e:
         LOGGER(__name__).error(f"Error in main execution: {e}")
+    finally:
+        loop.run_until_complete(loop.shutdown_asyncgens())
+        loop.close()
