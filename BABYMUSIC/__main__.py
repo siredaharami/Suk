@@ -3,7 +3,7 @@ import importlib
 from flask import Flask
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
-from multiprocessing import Process
+from threading import Thread
 import config
 from BABYMUSIC import LOGGER, app, userbot
 from BABYMUSIC.core.call import BABY
@@ -20,7 +20,6 @@ def home():
     return "BabyMusic bot is running!"
 
 async def init():
-    # Check for required configuration
     if (
         not config.STRING1
         and not config.STRING2
@@ -28,21 +27,17 @@ async def init():
         and not config.STRING4
         and not config.STRING5
     ):
-        LOGGER(__name__).error("𝐒𝐭𝐫𝐢𝐧𝐠 𝐒𝐞𝐬𝐬𝐢𝐨𝐧 𝐍𝐨𝐭 𝐅𝐢𝐥𝐥𝐞𝐝, 𝐏𝐥𝐞𝐚𝐬𝐞 𝐅𝐢𝐥𝐥 𝐀 𝐏𝐲𝐫𝐨𝐠𝐫𝐚𝐦 𝐒𝐞𝐬𝐬𝐢𝐨𝐧")
-        return  # Changed exit() to return for graceful handling
+        LOGGER(__name__).error("String Session Not Filled. Please provide a Pyrogram Session.")
+        return
 
     await sudo()
     try:
-        # Load global banned users
         users = await get_gbanned()
         for user_id in users:
             BANNED_USERS.add(user_id)
-
-        # Load banned users
         users = await get_banned_users()
         for user_id in users:
             BANNED_USERS.add(user_id)
-
         LOGGER(__name__).info("Banned users loaded successfully.")
     except Exception as e:
         LOGGER(__name__).error(f"Error loading banned users: {e}")
@@ -51,46 +46,43 @@ async def init():
         await app.start()
         LOGGER(__name__).info("App started successfully.")
 
-        # Load all modules
         for all_module in ALL_MODULES:
             importlib.import_module("BABYMUSIC.plugins" + all_module)
-          
-        LOGGER("BABYMUSIC.plugins").info("𝐀𝐥𝐥 𝐅𝐞𝐚𝐭𝐮𝐫𝐞𝐬 𝐋𝐨𝐚𝐝𝐞𝐝 𝐁𝐚𝐛𝐲🥳...")
+        LOGGER("BABYMUSIC.plugins").info("All Features Loaded Successfully.")
         
         await userbot.start()
         await BABY.start()
 
         try:
-            # Start stream call
             await BABY.stream_call("https://te.legra.ph/file/29f784eb49d230ab62e9e.mp4")
         except NoActiveGroupCall:
-            LOGGER("BABYMUSIC").error("𝗣𝗹𝗭 𝗦𝗧𝗔𝗥𝗧 𝗬𝗢𝗨𝗥 𝗟𝗢𝗚 𝗚𝗥𝗢𝗨𝗣 𝗩𝗢𝗜𝗖𝗘𝗖𝗛𝗔𝗧\𝗖𝗛𝗔𝗡𝗡𝗘𝗟\n\n𝗕𝗔𝗕𝗬𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧 𝗦𝗧𝗢𝗣........")
+            LOGGER("BABYMUSIC").error("Please start your log group voice chat or channel.")
             return
         except Exception as e:
             LOGGER("BABYMUSIC").error(f"Error starting stream call: {e}")
 
         await BABY.decorators()
-        LOGGER("BABYMUSIC").info(
-            "╔═════ஜ۩۞۩ஜ════╗\n  ☠︎︎𝗠𝗔𝗗𝗘 𝗕𝗬 𝗠𝗥 𝗨𝗧𝗧𝗔𝗠★𝗥𝗔𝗧𝗛𝗢𝗥𝗘\n╚═════ஜ۩۞۩ஜ════╝"
-        )
+        LOGGER("BABYMUSIC").info("Bot started successfully.")
 
-        # Keep the bot running
-        await idle()
+        await idle()  # Keep bot running
         
     except Exception as e:
         LOGGER(__name__).error(f"Error during bot initialization: {e}")
     finally:
         await app.stop()
         await userbot.stop()
-        LOGGER("BABYMUSIC").info("𝗦𝗧𝗢𝗣 𝗕𝗔𝗕𝗬 𝗠𝗨𝗦𝗜𝗖🎻 𝗕𝗢𝗧..")
+        LOGGER("BABYMUSIC").info("BabyMusic bot stopped.")
 
 def start_flask():
     flask_app.run(host="0.0.0.0", port=8000)
 
 if __name__ == "__main__":
-    # Flask app ko alag process mein start karna
-    flask_process = Process(target=start_flask)
-    flask_process.start()
+    # Flask ko alag thread mein run karte hain
+    flask_thread = Thread(target=start_flask)
+    flask_thread.start()
     
-    # Bot ko initialize karna
-    asyncio.run(init())
+    # Bot ke liye naya async loop setup karte hain
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(init())
+    loop.close()
