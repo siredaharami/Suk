@@ -33,16 +33,6 @@ def track_markup(_, videoid, user_id, channel, fplay):
                 callback_data="GetTimer",
             )
         ],
-        [
-            InlineKeyboardButton(text="▷", callback_data=f"ADMIN Resume|{chat_id}"),
-            InlineKeyboardButton(text="II", callback_data=f"ADMIN Pause|{chat_id}"),
-            InlineKeyboardButton(text="‣‣I", callback_data=f"ADMIN Skip|{chat_id}"),
-            InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}"),
-        ],
-        [
-         InlineKeyboardButton(text="● ❍ᴡɴᴇꝛ ●", user_id=config.OWNER_ID),
-         InlineKeyboardButton(text="● ɢʀᴏᴜᴘ ●", url=f"{SUPPORT_CHAT}",),
-        ],
         [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")],
     ]
     return buttons
@@ -50,16 +40,6 @@ def track_markup(_, videoid, user_id, channel, fplay):
 
 def stream_markup(_, chat_id):
     buttons = [
-        [
-            InlineKeyboardButton(text="▷", callback_data=f"ADMIN Resume|{chat_id}"),
-            InlineKeyboardButton(text="II", callback_data=f"ADMIN Pause|{chat_id}"),
-            InlineKeyboardButton(text="‣‣I", callback_data=f"ADMIN Skip|{chat_id}"),
-            InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}"),
-        ],
-        [
-         InlineKeyboardButton(text="● ❍ᴡɴᴇꝛ ●", user_id=config.OWNER_ID),
-         InlineKeyboardButton(text="● ɢʀᴏᴜᴘ ●", url=f"{SUPPORT_CHAT}",),
-        ],
         [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")],
     ]
     return buttons
