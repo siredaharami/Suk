@@ -64,16 +64,17 @@ async def init():
         await BABY.decorators()
         LOGGER("BABYMUSIC").info("Bot started successfully.")
 
-        await idle()  # Keep bot running
+        # Keep the bot running
+        await idle()  
         
     except Exception as e:
         LOGGER(__name__).error(f"Error during bot initialization: {e}")
     finally:
+        # Ensure proper shutdown
         await app.stop()
         await userbot.stop()
         LOGGER("BABYMUSIC").info("BabyMusic bot stopped.")
         
-        # Explicitly close the client session
         if hasattr(app, 'client') and app.client is not None:
             await app.client.close()
 
@@ -81,7 +82,7 @@ async def start_flask():
     flask_app.run(host="0.0.0.0", port=8000)
 
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    
-    # Start Flask in an event loop
-    loop.run_until_complete(asyncio.gather(init(), start_flask()))
+    try:
+        asyncio.run(asyncio.gather(init(), start_flask()))
+    except Exception as e:
+        LOGGER(__name__).error(f"Error in main execution: {e}")
