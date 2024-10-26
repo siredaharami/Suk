@@ -32,7 +32,7 @@ async def init():
         and not config.STRING5
     ):
         LOGGER(__name__).error("𝐒𝐭𝐫𝐢𝐧𝐠 𝐒𝐞𝐬𝐬𝐢𝐨𝐧 𝐍𝐨𝐭 𝐅𝐢𝐥𝐥𝐞𝐝, 𝐏𝐥𝐞𝐚𝐬𝐞 𝐅𝐢𝐥𝐥 𝐀 𝐏𝐲𝐫𝐨𝐠𝐫𝐚𝐦 𝐒𝐞𝐬𝐬𝐢𝐨𝐧")
-        return  # Changed exit() to return for graceful handling
+        return
 
     await sudo()
     try:
@@ -110,13 +110,13 @@ async def shutdown():
     LOGGER("BABYMUSIC").info("BabyMusic bot stopped.")
 
 def start_flask():
-    flask_app.run(host="0.0.0.0", port=8000, threaded=True, use_reloader=False)
+    # Run the Flask app in a blocking manner
+    flask_app.run(host="0.0.0.0", port=8000)
 
 # Function to handle graceful shutdown
 def signal_handler(sig, frame):
     print("Gracefully shutting down...")
     asyncio.run_coroutine_threadsafe(shutdown(), asyncio.get_event_loop())
-    sys.exit(0)
 
 # Register the signal handler
 signal.signal(signal.SIGINT, signal_handler)
