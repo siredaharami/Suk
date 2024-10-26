@@ -1,5 +1,7 @@
 import asyncio
 import importlib
+import signal
+import sys
 from flask import Flask
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
@@ -55,7 +57,7 @@ async def init():
         # Load all modules
         for all_module in ALL_MODULES:
             importlib.import_module("BABYMUSIC.plugins" + all_module)
-          
+           
         LOGGER("BABYMUSIC.plugins").info("𝐀𝐥𝐥 𝐅𝐞𝐚𝐭𝐮𝐫𝐞𝐬 𝐋𝐨𝐚𝐝𝐞𝐝 𝐁𝐚𝐛𝐲🥳...")
         
         await userbot.start()
@@ -104,6 +106,16 @@ async def shutdown():
 
 def start_flask():
     flask_app.run(host="0.0.0.0", port=8000)
+
+# Function to handle graceful shutdown
+def signal_handler(sig, frame):
+    print("Gracefully shutting down...")
+    asyncio.run(shutdown())
+    sys.exit(0)
+
+# Register the signal handler
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
 
 if __name__ == "__main__":
     # Set the event loop for the main thread
