@@ -638,14 +638,12 @@ async def slider_queries(client, CallbackQuery, _):
         buttons = slider_markup(_, vidid, user_id, query, query_type, cplay, fplay)
 
         # Prepare text message
-        
-try:
+        try:
     text_message = _["play_10"].format(title.title(), duration_min)
     print("play_10 text formatted correctly:", text_message)
 except KeyError as e:
     print(f"KeyError encountered in play_10: {e}")
     text_message = "Information not available"
-
 
         # Edit message with text and buttons
         return await CallbackQuery.edit_message_text(
@@ -669,17 +667,15 @@ except KeyError as e:
         buttons = slider_markup(_, vidid, user_id, query, query_type, cplay, fplay)
 
         # Prepare text message
-        
-try:
+        try:
     text_message = _["play_10"].format(title.title(), duration_min)
     print("play_10 text formatted correctly:", text_message)
 except KeyError as e:
     print(f"KeyError encountered in play_10: {e}")
     text_message = "Information not available"
 
-
         # Edit message with text and buttons
         return await CallbackQuery.edit_message_text(
             text=text_message,
             reply_markup=InlineKeyboardMarkup(buttons)
-            )
+                )
