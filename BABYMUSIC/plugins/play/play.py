@@ -169,7 +169,6 @@ async def play_commnd(
                 videoid = url.split("/")[-1].split("?")[0]
                 details, track_id = await YouTube.track(f"https://www.youtube.com/watch?v={videoid}")
                 streamtype = "youtube"
-                img = details["thumb"]
                 cap = _["play_11"].format(
                     details["title"],
                     details["duration_min"],
@@ -181,7 +180,6 @@ async def play_commnd(
                     print(e)
                     return await mystic.edit_text(_["play_3"])
                 streamtype = "youtube"
-                img = details["thumb"]
                 cap = _["play_11"].format(
                     details["title"],
                     details["duration_min"],
