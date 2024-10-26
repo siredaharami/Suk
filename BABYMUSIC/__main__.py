@@ -110,7 +110,8 @@ async def shutdown():
     LOGGER("BABYMUSIC").info("BabyMusic bot stopped.")
 
 def start_flask():
-    # Run the Flask app in a blocking manner
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     flask_app.run(host="0.0.0.0", port=8000)
 
 # Function to handle graceful shutdown
