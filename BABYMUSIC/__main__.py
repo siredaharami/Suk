@@ -1,6 +1,6 @@
 import asyncio
 import importlib
-
+from flask import Flask
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
 
@@ -12,6 +12,12 @@ from BABYMUSIC.plugins import ALL_MODULES
 from BABYMUSIC.utils.database import get_banned_users, get_gbanned
 from config import BANNED_USERS
 
+# Create a Flask app
+flask_app = Flask(__name__)
+
+@flask_app.route("/")
+def home():
+    return "BABY MUSIC BOT is running!"
 
 async def init():
     if (
@@ -59,4 +65,6 @@ async def init():
 
 
 if __name__ == "__main__":
+    # Run Flask app on port 8000 in a separate thread
+    flask_app.run(port=8000)
     asyncio.get_event_loop().run_until_complete(init())
