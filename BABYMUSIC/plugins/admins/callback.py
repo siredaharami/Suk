@@ -348,7 +348,7 @@ async def del_back_playlist(client, CallbackQuery, _):
                 db[chat_id][0]["markup"] = "tg"
             else:
                 button = stream_markup(_, chat_id)
-                run = await CallbackQuery.message.reply_message(
+                run = await CallbackQuery.message.reply_to_message(
                     caption=_["stream_1"].format(
                         f"https://t.me/{app.username}?start=info_{videoid}",
                         title[:23],
