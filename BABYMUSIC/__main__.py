@@ -41,5 +41,3 @@ async def init():
 
         await app.start()
         LOGGER(__name__).info("App started successfully.")
-
-     
