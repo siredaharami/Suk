@@ -3,8 +3,7 @@ import importlib
 from flask import Flask
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
-from threading import Thread
-
+from multiprocessing import Process
 import config
 from BABYMUSIC import LOGGER, app, userbot
 from BABYMUSIC.core.call import BABY
@@ -89,4 +88,9 @@ def start_flask():
     flask_app.run(host="0.0.0.0", port=8000)
 
 if __name__ == "__main__":
-    # Start Flask in a
+    # Flask app ko alag process mein start karna
+    flask_process = Process(target=start_flask)
+    flask_process.start()
+    
+    # Bot ko initialize karna
+    asyncio.run(init())
