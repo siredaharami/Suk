@@ -190,7 +190,7 @@ async def play_commnd(
             spotify = True
             if not config.SPOTIFY_CLIENT_ID and not config.SPOTIFY_CLIENT_SECRET:
                 return await mystic.edit_text(
-                    "» sᴘᴏᴛɪғʏ ɪs ɴᴏᴛ sᴜᴘᴘᴏʀᴛᴇᴅ ʏᴇᴛ.\n\nᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ."
+                    "Â» sá´˜á´á´›ÉªÒ“Ê Éªs É´á´á´› sá´œá´˜á´˜á´Ê€á´›á´‡á´… Êá´‡á´›.\n\ná´˜ÊŸá´‡á´€sá´‡ á´›Ê€Ê á´€É¢á´€ÉªÉ´ ÊŸá´€á´›á´‡Ê€."
                 )
             if "track" in url:
                 try:
@@ -505,7 +505,7 @@ async def play_music(client, CallbackQuery, _):
 async def SHUKLAmous_check(client, CallbackQuery):
     try:
         await CallbackQuery.answer(
-            "» ʀᴇᴠᴇʀᴛ ʙᴀᴄᴋ ᴛᴏ ᴜsᴇʀ ᴀᴄᴄᴏᴜɴᴛ :\n\nᴏᴘᴇɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ sᴇᴛᴛɪɴɢs.\n-> ᴀᴅᴍɪɴɪsᴛʀᴀᴛᴏʀs\n-> ᴄʟɪᴄᴋ ᴏɴ ʏᴏᴜʀ ɴᴀᴍᴇ\n-> ᴜɴᴄʜᴇᴄᴋ ᴀɴᴏɴʏᴍᴏᴜs ᴀᴅᴍɪɴ ᴘᴇʀᴍɪssɪᴏɴs.",
+            "Â» Ê€á´‡á´ á´‡Ê€á´› Ê™á´€á´„á´‹ á´›á´ á´œsá´‡Ê€ á´€á´„á´„á´á´œÉ´á´› :\n\ná´á´˜á´‡É´ Êá´á´œÊ€ É¢Ê€á´á´œá´˜ sá´‡á´›á´›ÉªÉ´É¢s.\n-> á´€á´…á´ÉªÉ´Éªsá´›Ê€á´€á´›á´Ê€s\n-> á´„ÊŸÉªá´„á´‹ á´É´ Êá´á´œÊ€ É´á´€á´á´‡\n-> á´œÉ´á´„Êœá´‡á´„á´‹ á´€É´á´É´Êá´á´á´œs á´€á´…á´ÉªÉ´ á´˜á´‡Ê€á´ÉªssÉªá´É´s.",
             show_alert=True,
         )
     except:
@@ -639,11 +639,11 @@ async def slider_queries(client, CallbackQuery, _):
 
         
 
-try:
-    text_message = _["play_10"].format(title.title(), duration_min)
+        try:
+            text_message = _["play_10"].format(title.title(), duration_min)
     print("play_10 text formatted correctly:", text_message)
-except KeyError as e:
-    print(f"KeyError encountered in play_10: {e}")
+            except KeyError as e:
+                print(f"KeyError encountered in play_10: {e}")
 
 
     # For "Backward" query
