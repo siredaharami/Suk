@@ -41,7 +41,7 @@ async def init():
         LOGGER(__name__).info("Banned users loaded successfully.")
     except Exception as e:
         LOGGER(__name__).error(f"Error loading banned users: {e}")
-    
+
     try:
         await app.start()
         LOGGER(__name__).info("App started successfully.")
@@ -49,7 +49,7 @@ async def init():
         for all_module in ALL_MODULES:
             importlib.import_module("BABYMUSIC.plugins" + all_module)
         LOGGER("BABYMUSIC.plugins").info("All Features Loaded Successfully.")
-        
+
         await userbot.start()
         await BABY.start()
 
@@ -74,7 +74,7 @@ async def init():
         await app.stop()
         await userbot.stop()
         LOGGER("BABYMUSIC").info("BabyMusic bot stopped.")
-        
+
         # Ensure client session is closed properly
         if hasattr(app, 'client') and app.client is not None:
             await app.client.close()
@@ -82,10 +82,14 @@ async def init():
 async def start_flask():
     flask_app.run(host="0.0.0.0", port=8000)
 
+async def main():
+    await asyncio.gather(init(), start_flask())
+
 if __name__ == "__main__":
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     try:
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(asyncio.gather(init(), start_flask()))
+        loop.run_until_complete(main())
     except Exception as e:
         LOGGER(__name__).error(f"Error in main execution: {e}")
     finally:
