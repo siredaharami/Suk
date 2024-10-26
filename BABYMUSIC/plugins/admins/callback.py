@@ -26,7 +26,7 @@ from pyrogram.errors import (
 from BABYMUSIC.utils.database import get_assistant
 from BABYMUSIC.utils.decorators.language import languageCB
 from BABYMUSIC.utils.formatters import seconds_to_min
-from BABYMUSIC.utils.inline import close_markup, stream_markup, stream_markup_timer
+from BABYMUSIC.utils.inline import close_markup, stream_markup
 from BABYMUSIC.utils.stream.autoclear import auto_clean
 from config import (
     BANNED_USERS,
