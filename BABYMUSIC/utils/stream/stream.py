@@ -13,7 +13,6 @@ from BABYMUSIC.utils.exceptions import AssistantErr
 from BABYMUSIC.utils.inline import aq_markup, close_markup, stream_markup
 from BABYMUSIC.utils.pastebin import BABYBin
 from BABYMUSIC.utils.stream.queue import put_queue, put_queue_index
-from BABYMUSIC.utils.thumbnails import get_thumb
 
 
 async def stream(
