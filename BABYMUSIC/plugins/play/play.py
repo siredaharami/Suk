@@ -628,15 +628,18 @@ async def slider_queries(client, CallbackQuery, _):
             await CallbackQuery.answer(_["playcb_2"])
         except:
             pass
-        title, duration_min, thumbnail, vidid = await YouTube.slider(query, query_type)
-        buttons = slider_markup(_, vidid, user_id, query, query_type, cplay, fplay)
-        return await CallbackQuery.edit_message_caption(
-            caption=_["play_10"].format(
-                title.title(),
-                duration_min,
-            ),
-            reply_markup=InlineKeyboardMarkup(buttons)
-       )
+        title, duration_min, vidid = await YouTube.slider(query, query_type)
+buttons = slider_markup(_, vidid, user_id, query, query_type, cplay, fplay)
+
+# Text message ke liye
+text_message = _["play_10"].format(title.title(), duration_min)
+
+# CallbackQuery ko edit karke text bhejna
+return await CallbackQuery.edit_message_text(
+    text=text_message,
+    reply_markup=InlineKeyboardMarkup(buttons)
+)
+
     if what == "B":
         if rtype == 0:
             query_type = 9
