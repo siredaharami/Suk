@@ -3,6 +3,7 @@ import importlib
 from flask import Flask
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
+from threading import Thread
 
 import config
 from BABYMUSIC import LOGGER, app, userbot
@@ -37,7 +38,8 @@ async def init():
         users = await get_banned_users()
         for user_id in users:
             BANNED_USERS.add(user_id)
-    except:
+    except Exception as e:
+        LOGGER(__name__).error(f"Error fetching banned users: {e}")
         pass
     await app.start()
     for all_module in ALL_MODULES:
@@ -52,7 +54,8 @@ async def init():
             "𝗣𝗹𝗭 𝗦𝗧𝗔𝗥𝗧 𝗬𝗢𝗨𝗥 𝗟𝗢𝗚 𝗚𝗥𝗢𝗨𝗣 𝗩𝗢𝗜𝗖𝗘𝗖𝗛𝗔𝗧\𝗖𝗛𝗔𝗡𝗡𝗘𝗟\n\n𝗕𝗔𝗕𝗬𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧 𝗦𝗧𝗢𝗣........"
         )
         exit()
-    except:
+    except Exception as e:
+        LOGGER(__name__).error(f"Error during stream call: {e}")
         pass
     await BABY.decorators()
     LOGGER("BABYMUSIC").info(
@@ -63,8 +66,13 @@ async def init():
     await userbot.stop()
     LOGGER("BABYMUSIC").info("𝗦𝗧𝗢𝗣 𝗕𝗔𝗕𝗬 𝗠𝗨𝗦𝗜𝗖🎻 𝗕𝗢𝗧..")
 
+def run_flask():
+    flask_app.run(host='0.0.0.0', port=8000)
 
 if __name__ == "__main__":
-    # Run Flask app on port 8000 in a separate thread
-    flask_app.run(port=8000)
+    # Run Flask app in a separate thread
+    flask_thread = Thread(target=run_flask)
+    flask_thread.start()
+    
+    # Run the bot initialization
     asyncio.get_event_loop().run_until_complete(init())
