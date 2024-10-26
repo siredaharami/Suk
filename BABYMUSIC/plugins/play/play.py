@@ -6,7 +6,7 @@ from pyrogram.types import InlineKeyboardMarkup, Message
 from pytgcalls.exceptions import NoActiveGroupCall
 
 import config
-from BABYMUSIC import Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, app
+from BABYMUSIC import Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, app, LOGGER
 from BABYMUSIC.core.call import BABY
 from BABYMUSIC.utils import seconds_to_min, time_to_seconds
 from BABYMUSIC.utils.channelplay import get_channeplayCB
@@ -97,7 +97,11 @@ async def play_commnd(
                 )
             except Exception as e:
                 ex_type = type(e).__name__
-                err = e if ex_type == "AssistantErr" else _["general_2"].format(ex_type)
+                if ex_type == "AssistantErr":
+                    err = e
+                else:
+                    err = _["general_2"].format(ex_type)
+                    LOGGER(__name__).error(ex_type, exc_info=True)
                 return await mystic.edit_text(err)
             return await mystic.delete()
         return
@@ -141,7 +145,11 @@ async def play_commnd(
                 )
             except Exception as e:
                 ex_type = type(e).__name__
-                err = e if ex_type == "AssistantErr" else _["general_2"].format(ex_type)
+                 if ex_type == "AssistantErr":
+                    err = e 
+                 else:
+                     err = _["general_2"].format(ex_type)
+                     LOGGER(__name__).error(ex_type, exc_info=True)
                 return await mystic.edit_text(err)
             return await mystic.delete()
         return
@@ -280,7 +288,11 @@ async def play_commnd(
                 )
             except Exception as e:
                 ex_type = type(e).__name__
-                err = e if ex_type == "AssistantErr" else _["general_2"].format(ex_type)
+                if ex_type == "AssistantErr":
+                    err = e
+                else:
+                    err = _["general_2"].format(ex_type)
+                    LOGGER(__name__).error(ex_type, exc_info=True)
                 return await mystic.edit_text(err)
             return await mystic.delete()
         else:
@@ -310,7 +322,11 @@ async def play_commnd(
                 )
             except Exception as e:
                 ex_type = type(e).__name__
-                err = e if ex_type == "AssistantErr" else _["general_2"].format(ex_type)
+                if ex_type == "AssistantErr":
+                    err = e 
+                else:
+                    err = _["general_2"].format(ex_type)
+                    LOGGER(__name__).error(ex_type, exc_info=True)
                 return await mystic.edit_text(err)
             return await play_logs(message, streamtype="M3u8 or Index Link")
     else:
@@ -366,7 +382,11 @@ async def play_commnd(
             )
         except Exception as e:
             ex_type = type(e).__name__
-            err = e if ex_type == "AssistantErr" else _["general_2"].format(ex_type)
+            if ex_type == "AssistantErr":
+                err = e 
+            else:
+                err = _["general_2"].format(ex_type)
+                LOGGER(__name__).error(ex_type, exc_info=True)
             return await mystic.edit_text(err)
         await mystic.delete()
         return await play_logs(message, streamtype=streamtype)
@@ -490,7 +510,11 @@ async def play_music(client, CallbackQuery, _):
         )
     except Exception as e:
         ex_type = type(e).__name__
-        err = e if ex_type == "AssistantErr" else _["general_2"].format(ex_type)
+        if ex_type == "AssistantErr":
+            err = e 
+        else:
+            err = _["general_2"].format(ex_type)
+            LOGGER(__name__).error(ex_type, exc_info=True)
         return await mystic.edit_text(err)
     return await mystic.delete()
 
@@ -588,7 +612,11 @@ async def play_playlists_command(client, CallbackQuery, _):
         )
     except Exception as e:
         ex_type = type(e).__name__
-        err = e if ex_type == "AssistantErr" else _["general_2"].format(ex_type)
+        if ex_type == "AssistantErr":
+            err = e
+        else:
+            err = _["general_2"].format(ex_type)
+            LOGGER(__name__).error(ex_type, exc_info=True)
         return await mystic.edit_text(err)
     return await mystic.delete()
 
