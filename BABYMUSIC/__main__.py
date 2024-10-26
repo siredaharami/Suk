@@ -49,7 +49,7 @@ async def init():
         LOGGER(__name__).info("Banned users loaded successfully.")
     except Exception as e:
         LOGGER(__name__).error(f"Error loading banned users: {e}")
-    
+
     try:
         await app.start()
         LOGGER(__name__).info("App started successfully.")
@@ -57,9 +57,9 @@ async def init():
         # Load all modules
         for all_module in ALL_MODULES:
             importlib.import_module("BABYMUSIC.plugins" + all_module)
-           
+
         LOGGER("BABYMUSIC.plugins").info("𝐀𝐥𝐥 𝐅𝐞𝐚𝐭𝐮𝐫𝐞𝐬 𝐋𝐨𝐚𝐝𝐞𝐝 𝐁𝐚𝐛𝐲🥳...")
-        
+
         await userbot.start()
         await BABY.start()
 
@@ -79,7 +79,7 @@ async def init():
 
         # Keep the bot running
         await idle()
-        
+
     except Exception as e:
         LOGGER(__name__).error(f"Error during bot initialization: {e}")
     finally:
@@ -87,25 +87,30 @@ async def init():
 
 async def shutdown():
     LOGGER("BABYMUSIC").info("Shutting down the bot...")
-    
+
     # Stop the app and userbot
     await app.stop()
     await userbot.stop()
-    
-    # Stop the call
-    await BABY.stop()
-    
+
+    # Stop the call if it is running
+    if BABY.is_running:  # Check if the call is active
+        await BABY.stop()
+
     # Close the dispatcher properly
     await app.dispatcher.stop()
-    
+
     # Ensure client session is closed properly
     if hasattr(app, 'client') and app.client is not None:
-        await app.client.close()
-    
+        try:
+            if not app.client.is_terminated:  # Check if the client is already terminated
+                await app.client.close()
+        except ConnectionError:
+            LOGGER("BABYMUSIC").warning("Client is already terminated.")
+
     LOGGER("BABYMUSIC").info("BabyMusic bot stopped.")
 
 def start_flask():
-    flask_app.run(host="0.0.0.0", port=8000)
+    flask_app.run(host="0.0.0.0", port=8000, threaded=True, use_reloader=False)
 
 # Function to handle graceful shutdown
 def signal_handler(sig, frame):
@@ -120,9 +125,9 @@ signal.signal(signal.SIGTERM, signal_handler)
 if __name__ == "__main__":
     # Set the event loop for the main thread
     asyncio.set_event_loop(asyncio.new_event_loop())
-    
+
     # Start Flask in a separate thread
     Thread(target=start_flask).start()
-    
+
     # Start the bot
     asyncio.run(init())
