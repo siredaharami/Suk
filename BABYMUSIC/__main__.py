@@ -73,16 +73,11 @@ async def init():
         await userbot.stop()
         LOGGER("BABYMUSIC").info("BabyMusic bot stopped.")
 
-def start_flask():
+async def start_flask():
     flask_app.run(host="0.0.0.0", port=8000)
 
 if __name__ == "__main__":
-    # Flask ko alag thread mein run karte hain
-    flask_thread = Thread(target=start_flask)
-    flask_thread.start()
+    loop = asyncio.get_event_loop()
     
-    # Bot ke liye naya async loop setup karte hain
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(init())
-    loop.close()
+    # Start Flask in an event loop
+    loop.run_until_complete(asyncio.gather(init(), start_flask()))
