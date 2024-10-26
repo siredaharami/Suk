@@ -45,15 +45,18 @@ async def init():
     await userbot.start()
     await BABY.start()
     
-    try:
-        await BABY.stream_call("https://te.legra.ph/file/29f784eb49d230ab62e9e.mp4")
-    except NoActiveGroupCall:
-        LOGGER("BABYMUSIC").error(
-            "𝗣𝗹𝗭 𝗦𝗧𝗔𝗥𝗧 𝗬𝗢𝗨𝗥 𝗟𝗢𝗚 𝗚𝗥𝗢𝗨𝗣 𝗩𝗢𝗜𝗖𝗘𝗖𝗛𝗔𝗧\𝗖𝗛𝗔𝗡𝗡𝗘𝗟\n\n𝗕𝗔𝗕𝗬𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧 𝗦𝗧𝗢𝗣........"
-        )
-        exit()
-    except Exception as e:
-        LOGGER(__name__).error(f"Error during stream call: {e}")
+    while True:
+        try:
+            await BABY.stream_call("https://te.legra.ph/file/29f784eb49d230ab62e9e.mp4")
+            break  # Break the loop if streaming starts successfully
+        except NoActiveGroupCall:
+            LOGGER("BABYMUSIC").error(
+                "𝗣𝗹𝗭 𝗦𝗧𝗔𝗥𝗧 𝗬𝗢𝗨𝗥 𝗟𝗢𝗚 𝗚𝗥𝗢𝗨𝗣 𝗩𝗢𝗜𝗖𝗘𝗖𝗛𝗔𝗧\𝗖𝗛𝗔𝗡𝗡𝗘𝗟\n\n𝗕𝗔𝗕𝗬𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧 𝗦𝗧𝗢𝗣........"
+            )
+            await asyncio.sleep(10)  # Retry after a short delay
+        except Exception as e:
+            LOGGER(__name__).error(f"Error during stream call: {e}")
+            await asyncio.sleep(10)  # Retry after a short delay
 
     await BABY.decorators()
     LOGGER("BABYMUSIC").info(
