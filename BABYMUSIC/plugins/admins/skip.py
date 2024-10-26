@@ -213,7 +213,7 @@ async def skip(cli, message: Message, _, chat_id):
         else:
             button = stream_markup(_, chat_id)
             run = await message.reply_text(
-                caption=_["stream_1"].format(
+                text=_["stream_1"].format(
                     f"https://t.me/{app.username}?start=info_{videoid}",
                     title[:23],
                     check[0]["dur"],
