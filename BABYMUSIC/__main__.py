@@ -72,6 +72,10 @@ async def init():
         await app.stop()
         await userbot.stop()
         LOGGER("BABYMUSIC").info("BabyMusic bot stopped.")
+        
+        # Explicitly close the client session
+        if hasattr(app, 'client') and app.client is not None:
+            await app.client.close()
 
 async def start_flask():
     flask_app.run(host="0.0.0.0", port=8000)
