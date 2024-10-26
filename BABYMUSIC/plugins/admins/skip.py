@@ -115,7 +115,6 @@ async def skip(cli, message: Message, _, chat_id):
             return await message.reply_text(_["call_6"])
         button = stream_markup(_, chat_id)
         run = await message.reply_photo(
-            photo=img,
             caption=_["stream_1"].format(
                 f"https://t.me/{app.username}?start=info_{videoid}",
                 title[:23],
@@ -147,7 +146,6 @@ async def skip(cli, message: Message, _, chat_id):
             return await mystic.edit_text(_["call_6"])
         button = stream_markup(_, chat_id)
         run = await message.reply_photo(
-            photo=img,
             caption=_["stream_1"].format(
                 f"https://t.me/{app.username}?start=info_{videoid}",
                 title[:23],
@@ -215,7 +213,6 @@ async def skip(cli, message: Message, _, chat_id):
         else:
             button = stream_markup(_, chat_id)
             run = await message.reply_photo(
-                photo=img,
                 caption=_["stream_1"].format(
                     f"https://t.me/{app.username}?start=info_{videoid}",
                     title[:23],
