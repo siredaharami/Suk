@@ -115,7 +115,7 @@ def start_flask():
 # Function to handle graceful shutdown
 def signal_handler(sig, frame):
     print("Gracefully shutting down...")
-    asyncio.run(shutdown())
+    asyncio.run_coroutine_threadsafe(shutdown(), asyncio.get_event_loop())
     sys.exit(0)
 
 # Register the signal handler
@@ -124,10 +124,11 @@ signal.signal(signal.SIGTERM, signal_handler)
 
 if __name__ == "__main__":
     # Set the event loop for the main thread
-    asyncio.set_event_loop(asyncio.new_event_loop())
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
 
     # Start Flask in a separate thread
     Thread(target=start_flask).start()
 
     # Start the bot
-    asyncio.run(init())
+    loop.run_until_complete(init())
