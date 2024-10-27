@@ -1,7 +1,6 @@
 import asyncio
 import importlib
-from aiohttp import web  # Import the web framework
-
+from aiohttp import web
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
 
@@ -15,44 +14,37 @@ from config import BANNED_USERS
 
 
 async def init():
-    if (
-        not config.STRING1
-        and not config.STRING2
-        and not config.STRING3
-        and not config.STRING4
-        and not config.STRING5
-    ):
+    if all(not getattr(config, f'STRING{i}', None) for i in range(1, 6)):
         LOGGER(__name__).error("𝐒𝐭𝐫𝐢𝐧𝐠 𝐒𝐞𝐬𝐬𝐢𝐨𝐧 𝐍𝐨𝐭 𝐅𝐢𝐥𝐥𝐞𝐝, 𝐏𝐥𝐞𝐚𝐬𝐞 𝐅𝐢𝐥𝐥 𝐀 𝐏𝐲𝐫𝐨𝐠𝐫𝐚𝐦 𝐒𝐞𝐬𝐬𝐢𝐨𝐧")
         exit()
+    
     await sudo()
     try:
-        users = await get_gbanned()
-        for user_id in users:
+        banned_users = await get_gbanned() + await get_banned_users()
+        for user_id in banned_users:
             BANNED_USERS.add(user_id)
-        users = await get_banned_users()
-        for user_id in users:
-            BANNED_USERS.add(user_id)
-    except:
-        pass
+    except Exception as e:
+        LOGGER(__name__).error(f"Error fetching banned users: {e}")
+
     await app.start()
-    for all_module in ALL_MODULES:
-        importlib.import_module("BABYMUSIC.plugins" + all_module)
+    
+    for module in ALL_MODULES:
+        importlib.import_module(f"BABYMUSIC.plugins{module}")
+    
     LOGGER("BABYMUSIC.plugins").info("𝐀𝐥𝐥 𝐅𝐞𝐚𝐭𝐮𝐫𝐞𝐬 𝐋𝐨𝐚𝐝𝐞𝐝 𝐁𝐚𝐛𝐲🥳...")
     await userbot.start()
     await BABY.start()
+
     try:
         await BABY.stream_call("https://te.legra.ph/file/29f784eb49d230ab62e9e.mp4")
     except NoActiveGroupCall:
-        LOGGER("BABYMUSIC").error(
-            "𝗣𝗹𝗭 𝗦𝗧𝗔𝗥𝗧 𝗬𝗢𝗨𝗥 𝗟𝗢𝗚 𝗚𝗥𝗢𝗨𝗣 𝗩𝗢𝗜𝗖𝗘𝗖𝗛𝗔𝗧\𝗖𝗛𝗔𝗡𝗡𝗘𝗟\n\n𝗕𝗔𝗕𝗬𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧 𝗦𝗧𝗢𝗣........"
-        )
+        LOGGER("BABYMUSIC").error("𝗣𝗹𝗭 𝗦𝗧𝗔𝗥𝗧 𝗬𝗢𝗨𝗥 𝗟𝗢𝗚 𝗚𝗥𝗢𝗨𝗣 𝗩𝗢𝗜𝗖𝗘𝗖𝗛𝗔𝗧\𝗖𝗛𝗔𝗡𝗡𝗘𝗟\n\n𝗕𝗔𝗕𝗬𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧 𝗦𝗧𝗢𝗣........")
         exit()
-    except:
-        pass
+    except Exception as e:
+        LOGGER("BABYMUSIC").error(f"Error during stream call: {e}")
+
     await BABY.decorators()
-    LOGGER("BABYMUSIC").info(
-        "╔═════ஜ۩۞۩ஜ════╗\n  ☠︎︎𝗠𝗔𝗗𝗘 𝗕𝗬 𝗠𝗥 𝗨𝗧𝗧𝗔𝗠★𝗥𝗔𝗧𝗛𝗢𝗥𝗘\n╚═════ஜ۩۞۩ஜ════╝"
-    )
+    LOGGER("BABYMUSIC").info("╔═════ஜ۩۞۩ஜ════╗\n  ☠︎︎𝗠𝗔𝗗𝗘 𝗕𝗬 𝗠𝗥 𝗨𝗧𝗧𝗔𝗠★𝗥𝗔𝗧𝗛𝗢𝗥𝗘\n╚═════ஜ۩۞۩ஜ════╝")
     await idle()
     await app.stop()
     await userbot.stop()
@@ -61,22 +53,24 @@ async def init():
 
 async def start_server():
     web_app = web.Application()
-    
-    # Define a simple route
+
     async def handle(request):
         return web.Response(text="Hello, this is BABYMUSIC server!")
 
-    web_app.router.add_get('/', handle)  # Add a route
+    web_app.router.add_get('/', handle)
 
     runner = web.AppRunner(web_app)
     await runner.setup()
-    site = web.TCPSite(runner, 'localhost', 8000)  # Listen on port 8000
-    await site.start()
-    LOGGER(__name__).info("Server started on http://localhost:8000")
+    try:
+        site = web.TCPSite(runner, '0.0.0.0', 8000)  # Listen on all interfaces
+        await site.start()
+        LOGGER(__name__).info("Server started on http://0.0.0.0:8000")
+    except Exception as e:
+        LOGGER(__name__).error(f"Error starting server: {e}")
 
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.run_until_complete(init())
-    loop.run_until_complete(start_server())  # Start the server
-    loop.run_forever()  # Keep running the event loop
+    loop.run_until_complete(start_server())
+    loop.run_forever()
