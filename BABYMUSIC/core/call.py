@@ -491,10 +491,6 @@ class Call(PyTgCalls):
     async def decorators(self):
         @self.one.on_kicked()
         @self.one.on_closed_voice_chat()
-        @self.two.on_closed_voice_chat()
-        @self.three.on_closed_voice_chat()
-        @self.four.on_closed_voice_chat()
-        @self.five.on_closed_voice_chat()
         @self.one.on_left()
         async def stream_services_handler(_, chat_id: int):
             await self.stop_stream(chat_id)
