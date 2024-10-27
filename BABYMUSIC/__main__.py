@@ -1,6 +1,5 @@
 import asyncio
 import importlib
-import httpx  # Make sure to install httpx if not already
 from flask import Flask
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
@@ -20,15 +19,6 @@ flask_app = Flask(__name__)
 @flask_app.route("/")
 def home():
     return "BABY MUSIC BOT is running!"
-
-async def ping_server():
-    while True:
-        try:
-            async with httpx.AsyncClient() as client:
-                await client.get("http://localhost:8000")  # Ping your Flask app
-            await asyncio.sleep(60)  # Ping every 60 seconds
-        except Exception as e:
-            LOGGER(__name__).error(f"Ping error: {e}")
 
 async def init():
     if (
@@ -84,8 +74,5 @@ if __name__ == "__main__":
     flask_thread = Thread(target=run_flask)
     flask_thread.start()
     
-    # Start the pinging task
-    asyncio.ensure_future(ping_server())
-
     # Run the bot initialization
     asyncio.get_event_loop().run_until_complete(init())
