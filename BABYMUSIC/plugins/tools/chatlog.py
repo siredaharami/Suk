@@ -5,18 +5,9 @@ from config import LOGGER_ID as LOG_GROUP_ID
 from BABYMUSIC import app 
 from pyrogram.errors import RPCError
 from typing import Union, Optional
-from PIL import Image, ImageDraw, ImageFont
 import asyncio, os, aiohttp
 from pathlib import Path
 from pyrogram.enums import ParseMode
-
-photo = [
-    "https://telegra.ph/file/1949480f01355b4e87d26.jpg",
-    "https://telegra.ph/file/3ef2cc0ad2bc548bafb30.jpg",
-    "https://telegra.ph/file/a7d663cd2de689b811729.jpg",
-    "https://telegra.ph/file/6f19dc23847f5b005e922.jpg",
-    "https://telegra.ph/file/2973150dd62fd27a3a6ba.jpg",
-]
 
 @app.on_message(filters.new_chat_members, group=2)
 async def join_watcher(_, message):    
@@ -28,15 +19,15 @@ async def join_watcher(_, message):
             msg = (
                 f"❍ ᴍᴜsɪᴄ ʙᴏᴛ ᴀᴅᴅᴇᴅ ɪɴ ᴀ ɴᴇᴡ ɢʀᴏᴜᴘ ●\n\n"
                 f"____________________________________\n\n"
-                f"❍ ᴄʜᴀᴛ ɴᴀᴍᴇ: {chat.title} ●\n"
-                f"❍ ᴄʜᴀᴛ ɪᴅ: {chat.id} ●\n"
+                f"❍ ᴄʜᴀᴛ ɴᴀᴍᴇ: {chat.title} \n"
+                f"❍ ᴄʜᴀᴛ ɪᴅ: {chat.id} \n"
                 f"❍ ᴄʜᴀᴛ ᴜsᴇʀɴᴀᴍᴇ: @{chat.username} ●\n"
-                f"❍ ᴄʜᴀᴛ ʟɪɴᴋ: [ᴄʟɪᴄᴋ]({link}) ●\n"
-                f"❍ ɢʀᴏᴜᴘ ᴍᴇᴍʙᴇʀs: {count} ●\n"
+                f"❍ ᴄʜᴀᴛ ʟɪɴᴋ: [ᴄʟɪᴄᴋ]({link}) \n"
+                f"❍ ɢʀᴏᴜᴘ ᴍᴇᴍʙᴇʀs: {count} \n"
                 f"❍ ᴀᴅᴅᴇᴅ ʙʏ: {message.from_user.mention} ●"
             )
-            await app.send_photo(LOG_GROUP_ID, photo=random.choice(photo), caption=msg, reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton(f"● sᴇᴇ ɢʀᴏᴜᴘ ●", url=f"{link}")]
+            await app.send_message(LOG_GROUP_ID, caption=msg, reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton(f"+ sᴇᴇ ɢʀᴏᴜᴘ +", url=f"{link}")]
             ]))
 
 @app.on_message(filters.left_chat_member)
@@ -47,5 +38,4 @@ async def on_left_chat_member(_, message: Message):
         username = f"@{message.chat.username}" if message.chat.username else "𝐏ʀɪᴠᴀᴛᴇ 𝐂ʜᴀᴛ"
         chat_id = message.chat.id
         left = f"✫ <b><u>#𝐋ᴇғᴛ_𝐆ʀᴏᴜᴘ</u></b> ✫\n\n𝐂ʜᴀᴛ 𝐓ɪᴛʟᴇ : {title}\n\n𝐂ʜᴀᴛ 𝐈ᴅ : {chat_id}\n\n𝐑ᴇᴍᴏᴠᴇᴅ 𝐁ʏ : {remove_by}\n\n𝐁ᴏᴛ : @{app.username}"
-        await app.send_photo(LOG_GROUP_ID, photo=random.choice(photo), caption=left)
-        
+        await app.send_message(LOG_GROUP_ID, caption=left)
