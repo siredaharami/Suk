@@ -1,6 +1,7 @@
 import asyncio
 import importlib
 import struct
+from sqlite3 import connect, OperationalError
 from quart import Quart
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
@@ -20,6 +21,27 @@ quart_app = Quart(__name__)
 @quart_app.route("/")
 async def home():
     return "BABY MUSIC BOT is running!"
+
+async def get_db_connection():
+    try:
+        conn = connect("your_database.db")  # Replace with your actual database path
+        return conn
+    except OperationalError as e:
+        LOGGER(__name__).error(f"Database connection error: {e}")
+        return None
+
+async def update_peers(parsed_peers):
+    conn = await get_db_connection()
+    if conn is None:
+        return
+    try:
+        cursor = conn.cursor()
+        cursor.executemany("INSERT INTO peers (user_id) VALUES (?)", parsed_peers)
+        conn.commit()
+    except OperationalError as e:
+        LOGGER(__name__).error(f"Error updating peers: {e}")
+    finally:
+        conn.close()
 
 async def init():
     if not any([config.STRING1, config.STRING2, config.STRING3, config.STRING4, config.STRING5]):
