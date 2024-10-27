@@ -212,30 +212,32 @@ async def stream(
                 reply_markup=InlineKeyboardMarkup(button),
             )
         else:
-            if not forceplay:
-                db[chat_id] = []
-            await BABY.join_call(chat_id, original_chat_id, file_path, video=None)
-            await put_queue(
-                chat_id,
-                original_chat_id,
-                file_path,
-                title,
-                duration_min,
-                user_name,
-                streamtype,
-                user_id,
-                "audio",
-                forceplay=forceplay,
-            )
-            button = stream_markup(_, chat_id)
-                original_chat_id,
-                text=_["stream_1"].format(
-                    config.SUPPORT_CHAT, title[:23], duration_min, user_name
-                ),
-                reply_markup=InlineKeyboardMarkup(button),
-            )
-            db[chat_id][0]["mystic"] = run
-            db[chat_id][0]["markup"] = "tg"
+    if not forceplay:
+        db[chat_id] = []
+    await BABY.join_call(chat_id, original_chat_id, file_path, video=None)
+    await put_queue(
+        chat_id,
+        original_chat_id,
+        file_path,
+        title,
+        duration_min,
+        user_name,
+        streamtype,
+        user_id,
+        "audio",
+        forceplay=forceplay,
+    )
+    button = stream_markup(_, chat_id)
+    run = await app.send_text(
+        chat_id=original_chat_id,
+        text=_["stream_1"].format(
+            config.SUPPORT_CHAT, title[:23], duration_min, user_name
+        ),
+        reply_markup=InlineKeyboardMarkup(button),
+    )
+    db[chat_id][0]["mystic"] = run
+    db[chat_id][0]["markup"] = "tg"
+
     elif streamtype == "telegram":
         file_path = result["path"]
         link = result["link"]
