@@ -1,6 +1,6 @@
 import asyncio
 import importlib
-from flask import Flask
+from quart import Quart
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
 from threading import Thread
@@ -13,11 +13,11 @@ from BABYMUSIC.plugins import ALL_MODULES
 from BABYMUSIC.utils.database import get_banned_users, get_gbanned
 from config import BANNED_USERS
 
-# Create a Flask app
-flask_app = Flask(__name__)
+# Create a Quart app
+quart_app = Quart(__name__)
 
-@flask_app.route("/")
-def home():
+@quart_app.route("/")
+async def home():
     return "BABY MUSIC BOT is running!"
 
 async def init():
@@ -26,7 +26,7 @@ async def init():
         exit()
 
     await sudo()
-    
+
     try:
         users = await get_gbanned()
         for user_id in users:
@@ -48,43 +48,36 @@ async def init():
     while True:
         try:
             await BABY.stream_call("https://te.legra.ph/file/29f784eb49d230ab62e9e.mp4")
-            break  # Break the loop if streaming starts successfully
+            break
         except NoActiveGroupCall:
-            LOGGER("BABYMUSIC").error(
-                "𝗣𝗹𝗭 𝗦𝗧𝗔𝗥𝗧 𝗬𝗢𝗨𝗥 𝗟𝗢𝗚 𝗚𝗥𝗢𝗨𝗣 𝗩𝗢𝗜𝗖𝗘𝗖𝗛𝗔𝗧\𝗖𝗛𝗔𝗡𝗡𝗘𝗟\n\n𝗕𝗔𝗕𝗬𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧 𝗦𝗧𝗢𝗣........"
-            )
-            await asyncio.sleep(10)  # Retry after a short delay
+            LOGGER("BABYMUSIC").error("𝗣𝗹𝗭 𝗦𝗧𝗔𝗥𝗧 𝗬𝗢𝗨𝗥 𝗟𝗢𝗚 𝗚𝗥𝗢𝗨𝗣 𝗩𝗢𝗜𝗖𝗘𝗖𝗛𝗔𝗧\𝗖𝗛𝗔𝗡𝗡𝗘𝗟\n\n𝗕𝗔𝗕𝗬𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧 𝗦𝗧𝗢𝗣........")
+            await asyncio.sleep(10)
         except Exception as e:
             LOGGER(__name__).error(f"Error during stream call: {e}")
-            await asyncio.sleep(10)  # Retry after a short delay
+            await asyncio.sleep(10)
 
     await BABY.decorators()
-    LOGGER("BABYMUSIC").info(
-        "╔═════ஜ۩۞۩ஜ════╗\n  ☠︎︎𝗠𝗔𝗗𝗘 𝗕𝗬 𝗠𝗥 𝗨𝗧𝗧𝗔𝗠★𝗥𝗔𝗧𝗛𝗢𝗥𝗘\n╚═════ஜ۩۞۩ஜ════╝"
-    )
+    LOGGER("BABYMUSIC").info("╔═════ஜ۩۞۩ஜ════╗\n  ☠︎︎𝗠𝗔𝗗𝗘 𝗕𝗬 𝗠𝗥 𝗨𝗧𝗧𝗔𝗠★𝗥𝗔𝗧𝗛𝗢𝗥𝗘\n╚═════ஜ۩۞۩ஜ════╝")
 
-    # Keeping the bot alive with a heartbeat
     while True:
-        await asyncio.sleep(60)  # Adjust the interval as needed
+        await asyncio.sleep(60)
 
 async def shutdown():
     await app.stop()
     await userbot.stop()
     LOGGER("BABYMUSIC").info("𝗦𝗧𝗢𝗣 𝗕𝗔𝗕𝗬 𝗠𝗨𝗦𝗜𝗖🎻 𝗕𝗢𝗧..")
 
-def run_flask():
-    flask_app.run(host='0.0.0.0', port=8000)
+async def run_quart():
+    await quart_app.run_task(host='0.0.0.0', port=8000)
 
 if __name__ == "__main__":
-    # Run Flask app in a separate thread
-    flask_thread = Thread(target=run_flask)
-    flask_thread.start()
+    loop = asyncio.get_event_loop()
 
-    # Run the bot initialization
+    # Run both the asyncio bot and the Quart app
     try:
-        asyncio.get_event_loop().run_until_complete(init())
+        loop.run_until_complete(asyncio.gather(init(), run_quart()))
     except KeyboardInterrupt:
-        asyncio.run(shutdown())
+        loop.run_until_complete(shutdown())
     except Exception as e:
         LOGGER(__name__).error(f"An error occurred: {e}")
-        asyncio.run(shutdown())
+        loop.run_until_complete(shutdown())
