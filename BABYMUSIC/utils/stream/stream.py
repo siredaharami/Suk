@@ -280,14 +280,18 @@ async def stream(
                 forceplay=forceplay,
             )
             if video:
-                await add_active_video_chat(chat_id)
-            button = stream_markup(_, chat_id)
-                original_chat_id,
-                text=_["stream_1"].format(link, title[:23], duration_min, user_name),
-                reply_markup=InlineKeyboardMarkup(button),
-            )
-            db[chat_id][0]["mystic"] = run
-            db[chat_id][0]["markup"] = "tg"
+    await add_active_video_chat(chat_id)
+
+button = stream_markup(_, chat_id)
+run = await app.send_text(
+    chat_id=original_chat_id,
+    text=_["stream_1"].format(link, title[:23], duration_min, user_name),
+    reply_markup=InlineKeyboardMarkup(button),
+)
+
+db[chat_id][0]["mystic"] = run
+db[chat_id][0]["markup"] = "tg"
+
     elif streamtype == "live":
         link = result["link"]
         vidid = result["vidid"]
