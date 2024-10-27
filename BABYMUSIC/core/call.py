@@ -119,27 +119,27 @@ class Call(PyTgCalls):
     async def stop_stream_force(self, chat_id: int):
         try:
             if config.STRING1:
-                await self.one.leave_group_call(chat_id)
+                await asyncio.gather(*[self.one.leave_group_call(chat_id), self.two.leave_group_call(chat_id), self.three.leave_group_call(chat_id), self.four.leave_group_call(chat_id), self.five.leave_group_call(chat_id)])
         except:
             pass
         try:
             if config.STRING2:
-                await self.two.leave_group_call(chat_id)
+                await asyncio.gather(*[self.one.leave_group_call(chat_id), self.two.leave_group_call(chat_id), self.three.leave_group_call(chat_id), self.four.leave_group_call(chat_id), self.five.leave_group_call(chat_id)])
         except:
             pass
         try:
             if config.STRING3:
-                await self.three.leave_group_call(chat_id)
+                await asyncio.gather(*[self.one.leave_group_call(chat_id), self.two.leave_group_call(chat_id), self.three.leave_group_call(chat_id), self.four.leave_group_call(chat_id), self.five.leave_group_call(chat_id)])
         except:
             pass
         try:
             if config.STRING4:
-                await self.four.leave_group_call(chat_id)
+                await asyncio.gather(*[self.one.leave_group_call(chat_id), self.two.leave_group_call(chat_id), self.three.leave_group_call(chat_id), self.four.leave_group_call(chat_id), self.five.leave_group_call(chat_id)])
         except:
             pass
         try:
             if config.STRING5:
-                await self.five.leave_group_call(chat_id)
+                await asyncio.gather(*[self.one.leave_group_call(chat_id), self.two.leave_group_call(chat_id), self.three.leave_group_call(chat_id), self.four.leave_group_call(chat_id), self.five.leave_group_call(chat_id)])
         except:
             pass
         try:
@@ -551,15 +551,15 @@ class Call(PyTgCalls):
     async def start(self):
         LOGGER(__name__).info("Starting PyTgCalls Client...\n")
         if config.STRING1:
-            await self.one.start()
+            await asyncio.gather(*[self.one.start(), self.two.start(), self.three.start(), self.four.start(), self.five.start()])
         if config.STRING2:
-            await self.two.start()
+            await asyncio.gather(*[self.one.start(), self.two.start(), self.three.start(), self.four.start(), self.five.start()])
         if config.STRING3:
-            await self.three.start()
+            await asyncio.gather(*[self.one.start(), self.two.start(), self.three.start(), self.four.start(), self.five.start()])
         if config.STRING4:
-            await self.four.start()
+            await asyncio.gather(*[self.one.start(), self.two.start(), self.three.start(), self.four.start(), self.five.start()])
         if config.STRING5:
-            await self.five.start()
+            await asyncio.gather(*[self.one.start(), self.two.start(), self.three.start(), self.four.start(), self.five.start()])
 
     async def decorators(self):
         @self.one.on_kicked()
