@@ -24,7 +24,7 @@ async def join_watcher(_, message):
                 f"❍ ɢʀᴏᴜᴘ ᴍᴇᴍʙᴇʀs: {count} \n"
                 f"❍ ᴀᴅᴅᴇᴅ ʙʏ: {message.from_user.mention} ●"
             )
-            await app.send_message(LOG_GROUP_ID, caption=msg, reply_markup=InlineKeyboardMarkup([
+            await app.send_message(LOG_GROUP_ID, text=msg, reply_markup=InlineKeyboardMarkup([
             ]))
 
 @app.on_message(filters.left_chat_member)
