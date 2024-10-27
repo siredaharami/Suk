@@ -35,6 +35,7 @@ from BABYMUSIC.utils.exceptions import AssistantErr
 from BABYMUSIC.utils.formatters import check_duration, seconds_to_min, speed_converter
 from BABYMUSIC.utils.inline.play import stream_markup
 from BABYMUSIC.utils.stream.autoclear import auto_clean
+from BABYMUSIC.utils.thumbnails import get_thumb
 from strings import get_string
 
 autoend = {}
@@ -119,27 +120,27 @@ class Call(PyTgCalls):
     async def stop_stream_force(self, chat_id: int):
         try:
             if config.STRING1:
-                await asyncio.gather(*[self.one.leave_group_call(chat_id), self.two.leave_group_call(chat_id), self.three.leave_group_call(chat_id), self.four.leave_group_call(chat_id), self.five.leave_group_call(chat_id)])
+                await self.one.leave_group_call(chat_id)
         except:
             pass
         try:
             if config.STRING2:
-                await asyncio.gather(*[self.one.leave_group_call(chat_id), self.two.leave_group_call(chat_id), self.three.leave_group_call(chat_id), self.four.leave_group_call(chat_id), self.five.leave_group_call(chat_id)])
+                await self.two.leave_group_call(chat_id)
         except:
             pass
         try:
             if config.STRING3:
-                await asyncio.gather(*[self.one.leave_group_call(chat_id), self.two.leave_group_call(chat_id), self.three.leave_group_call(chat_id), self.four.leave_group_call(chat_id), self.five.leave_group_call(chat_id)])
+                await self.three.leave_group_call(chat_id)
         except:
             pass
         try:
             if config.STRING4:
-                await asyncio.gather(*[self.one.leave_group_call(chat_id), self.two.leave_group_call(chat_id), self.three.leave_group_call(chat_id), self.four.leave_group_call(chat_id), self.five.leave_group_call(chat_id)])
+                await self.four.leave_group_call(chat_id)
         except:
             pass
         try:
             if config.STRING5:
-                await asyncio.gather(*[self.one.leave_group_call(chat_id), self.two.leave_group_call(chat_id), self.three.leave_group_call(chat_id), self.four.leave_group_call(chat_id), self.five.leave_group_call(chat_id)])
+                await self.five.leave_group_call(chat_id)
         except:
             pass
         try:
@@ -390,10 +391,11 @@ class Call(PyTgCalls):
                         original_chat_id,
                         text=_["call_6"],
                     )
+                img = await get_thumb(videoid)
                 button = stream_markup(_, chat_id)
-                run = await app.send_photo(
+                run = await app.send_text(
                     chat_id=original_chat_id,
-                    caption=_["stream_1"].format(
+                    text=_["stream_1"].format(
                         f"https://t.me/{app.username}?start=info_{videoid}",
                         title[:23],
                         check[0]["dur"],
@@ -411,7 +413,7 @@ class Call(PyTgCalls):
                         mystic,
                         videoid=True,
                         video=True if str(streamtype) == "video" else False,
-                   )
+                    )
                 except:
                     return await mystic.edit_text(
                         _["call_6"], disable_web_page_preview=True
@@ -436,9 +438,9 @@ class Call(PyTgCalls):
                     )
                 button = stream_markup(_, chat_id)
                 await mystic.delete()
-                run = await app.send_photo(
+                run = await app.send_text(
                     chat_id=original_chat_id,
-                    caption=_["stream_1"].format(
+                    text=_["stream_1"].format(
                         f"https://t.me/{app.username}?start=info_{videoid}",
                         title[:23],
                         check[0]["dur"],
@@ -520,9 +522,11 @@ class Call(PyTgCalls):
                     db[chat_id][0]["mystic"] = run
                     db[chat_id][0]["markup"] = "tg"
                 else:
+                    img = await get_thumb(videoid)
                     button = stream_markup(_, chat_id)
-                    run = await app.send_message(
+                    run = await app.send_photo(
                         chat_id=original_chat_id,
+                        photo=img,
                         caption=_["stream_1"].format(
                             f"https://t.me/{app.username}?start=info_{videoid}",
                             title[:23],
@@ -538,28 +542,13 @@ class Call(PyTgCalls):
         pings = []
         if config.STRING1:
             pings.append(await self.one.ping)
-        if config.STRING2:
-            pings.append(await self.two.ping)
-        if config.STRING3:
-            pings.append(await self.three.ping)
-        if config.STRING4:
-            pings.append(await self.four.ping)
-        if config.STRING5:
-            pings.append(await self.five.ping)
         return str(round(sum(pings) / len(pings), 3))
 
     async def start(self):
         LOGGER(__name__).info("Starting PyTgCalls Client...\n")
         if config.STRING1:
-            await asyncio.gather(*[self.one.start(), self.two.start(), self.three.start(), self.four.start(), self.five.start()])
-        if config.STRING2:
-            await asyncio.gather(*[self.one.start(), self.two.start(), self.three.start(), self.four.start(), self.five.start()])
-        if config.STRING3:
-            await asyncio.gather(*[self.one.start(), self.two.start(), self.three.start(), self.four.start(), self.five.start()])
-        if config.STRING4:
-            await asyncio.gather(*[self.one.start(), self.two.start(), self.three.start(), self.four.start(), self.five.start()])
-        if config.STRING5:
-            await asyncio.gather(*[self.one.start(), self.two.start(), self.three.start(), self.four.start(), self.five.start()])
+            await self.one.start()
+        
 
     async def decorators(self):
         @self.one.on_kicked()
