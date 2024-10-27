@@ -25,7 +25,6 @@ async def join_watcher(_, message):
                 f"❍ ᴀᴅᴅᴇᴅ ʙʏ: {message.from_user.mention} ●"
             )
             await app.send_message(LOG_GROUP_ID, caption=msg, reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton(f"+ sᴇᴇ ɢʀᴏᴜᴘ +", url=f"{link}")]
             ]))
 
 @app.on_message(filters.left_chat_member)
