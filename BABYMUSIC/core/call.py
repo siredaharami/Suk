@@ -81,6 +81,8 @@ class Call(PyTgCalls):
         try:
             if config.STRING1:
                 await self.one.leave_group_call(chat_id)
+        except:
+            pass
         try:
             await _clear_(chat_id)
         except:
