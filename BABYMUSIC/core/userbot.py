@@ -17,41 +17,13 @@ class Userbot(Client):
             session_string=str(config.STRING1),
             no_updates=True,
         )
-        self.two = Client(
-            name="BABYAss2",
-            api_id=config.API_ID,
-            api_hash=config.API_HASH,
-            session_string=str(config.STRING2),
-            no_updates=True,
-        )
-        self.three = Client(
-            name="BABYAss3",
-            api_id=config.API_ID,
-            api_hash=config.API_HASH,
-            session_string=str(config.STRING3),
-            no_updates=True,
-        )
-        self.four = Client(
-            name="BABYAss4",
-            api_id=config.API_ID,
-            api_hash=config.API_HASH,
-            session_string=str(config.STRING4),
-            no_updates=True,
-        )
-        self.five = Client(
-            name="BABYAss5",
-            api_id=config.API_ID,
-            api_hash=config.API_HASH,
-            session_string=str(config.STRING5),
-            no_updates=True,
-        )
 
     async def start(self):
         LOGGER(__name__).info(f"Starting Assistants...")
         if config.STRING1:
             await self.one.start()
             try:
-                await self.one.join_chat("https://t.me/+j6FO8pK8IIkxZDU1")
+                await self.one.join_chat("https://t.me/+OL6jdTL7JAJjYzVl")
                 await self.one.join_chat("BABY09_WORLD")
             except:
                 pass
