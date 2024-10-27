@@ -1,7 +1,7 @@
 import asyncio
 import importlib
-import requests  # Ensure requests is imported
-import time  # Ensure time is imported
+import requests
+import time
 from flask import Flask
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
@@ -29,7 +29,6 @@ def keep_alive():
         except Exception as e:
             print(f"Ping error: {e}")
         time.sleep(300)  # Ping every 5 minutes
-    await idle()
 
 async def init():
     if (
@@ -60,7 +59,7 @@ async def init():
     print("Flask app started successfully. Loading modules...")
 
     for all_module in ALL_MODULES:
-        importlib.import_module("BABYMUSIC.plugins" + all_module)
+        importlib.import_module(f"BABYMUSIC.plugins.{all_module}")
 
     print("Modules loaded. Starting userbot and BABY...")
     
@@ -89,9 +88,9 @@ def run_flask():
     flask_app.run(host='0.0.0.0', port=8000)
 
 if __name__ == "__main__":
-    # Run Flask app in a separate thread
-    flask_thread = Thread(target=run_flask)
-    flask_thread.start()
+    # Start the keep_alive function in a separate thread
+    keep_alive_thread = Thread(target=keep_alive)
+    keep_alive_thread.start()
     
     # Run the bot initialization
-    asyncio.run(init())  # Updated to use asyncio.run for better compatibility
+    asyncio.run(init())
