@@ -36,7 +36,7 @@ async def start_bot():
     print("LOG: Found Bot token Booting Zeus.")
     
     # Start all clients
-    clients = [userbot, BABY]  # Assuming userbot and BABY are your clients
+    clients = [userbot, BABY]
     ids = []
     for cli in clients:
         try:
@@ -68,7 +68,9 @@ async def init():
     
     await app.start()
     for all_module in ALL_MODULES:
-        importlib.import_module("BABYMUSIC.plugins." + all_module)
+        module_name = f"BABYMUSIC.plugins.{all_module}"
+        print(f"Trying to import: {module_name}")
+        importlib.import_module(module_name)
     
     LOGGER("BABYMUSIC.plugins").info("All Features Loaded Baby🥳...")
     await userbot.start()
@@ -88,9 +90,8 @@ async def init():
     LOGGER("BABYMUSIC").info(
         "╔═════ஜ۩۞۩ஜ════╗\n  ☠︎︎MADE BY MR UTTAM★RATHORE\n╚═════ஜ۩۞۩ஜ════╝"
     )
-    
-    # The app will not reach this if idle() is called first
-    await idle()
+
+    await idle()  # Keep the bot running
     await app.stop()
     await userbot.stop()
     LOGGER("BABYMUSIC").info("STOP BABY MUSIC🎻 BOT..")
