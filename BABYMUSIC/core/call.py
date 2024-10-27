@@ -17,9 +17,9 @@ from pytgcalls.types.input_stream.quality import HighQualityAudio, MediumQuality
 from pytgcalls.types.stream import StreamAudioEnded
 
 import config
-from SONALI import LOGGER, YouTube, app
-from SONALI.misc import db
-from SONALI.utils.database import (
+from BABYMUSIC import LOGGER, YouTube, app
+from BABYMUSIC.misc import db
+from BABYMUSIC.utils.database import (
     add_active_chat,
     add_active_video_chat,
     get_lang,
@@ -31,11 +31,11 @@ from SONALI.utils.database import (
     remove_active_video_chat,
     set_loop,
 )
-from SONALI.utils.exceptions import AssistantErr
-from SONALI.utils.formatters import check_duration, seconds_to_min, speed_converter
-from SONALI.utils.inline.play import stream_markup, telegram_markup
-from SONALI.utils.stream.autoclear import auto_clean
-from SONALI.utils.thumbnails import get_thumb
+from BABYMUSIC.utils.exceptions import AssistantErr
+from BABYMUSIC.utils.formatters import check_duration, seconds_to_min, speed_converter
+from BABYMUSIC.utils.inline.play import stream_markup, telegram_markup
+from BABYMUSIC.utils.stream.autoclear import auto_clean
+from BABYMUSIC.utils.thumbnails import get_thumb
 from strings import get_string
 
 autoend = {}
