@@ -149,9 +149,8 @@ async def welcome(client, message: Message):
                     return await app.leave_chat(message.chat.id)
 
                 out = start_panel(_)
-                await message.reply_photo(
-                    random.choice(YUMI_PICS),
-                    caption=_["start_3"].format(
+                await message.reply_text(
+                    text=_["start_3"].format(
                         message.from_user.mention,
                         app.mention,
                         message.chat.title,
