@@ -46,10 +46,10 @@ async def init():
 
     await BABY.decorators()
     LOGGER("BABYMUSIC").info("╔═════ஜ۩۞۩ஜ════╗\n  ☠︎︎𝗠𝗔𝗗𝗘 𝗕𝗬 𝗠𝗥 𝗨𝗧𝗧𝗔𝗠★𝗥𝗔𝗧𝗛𝗢𝗥𝗘\n╚═════ஜ۩۞۩ஜ════╝")
-    await idle()
-    await app.stop()
-    await userbot.stop()
-    LOGGER("BABYMUSIC").info("𝗦𝗧𝗢𝗣 𝗕𝗔𝗕𝗬 𝗠𝗨𝗦𝗜𝗖🎻 𝗕𝗢𝗧..")
+    
+    # Instead of idle(), we can use a manual loop to keep it running
+    while True:
+        await asyncio.sleep(3600)  # Keep the event loop alive
 
 
 def start_flask():
@@ -63,11 +63,12 @@ def start_flask():
 
 
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    
-    # Start the bot in a separate thread
-    bot_thread = Thread(target=lambda: loop.run_until_complete(init()))
+    # Start the bot and Flask server
+    bot_loop = asyncio.get_event_loop()
+
+    # Run bot initialization in a thread
+    bot_thread = Thread(target=lambda: bot_loop.run_until_complete(init()))
     bot_thread.start()
 
-    # Start Flask server
+    # Start Flask server in the main thread
     start_flask()
