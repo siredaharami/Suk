@@ -4,6 +4,7 @@ from flask import Flask
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
 from threading import Thread
+import time
 
 import config
 from BABYMUSIC import LOGGER, app, userbot
@@ -19,6 +20,13 @@ flask_app = Flask(__name__)
 @flask_app.route("/")
 def home():
     return "BABY MUSIC BOT is running!"
+
+async def ping():
+    while True:
+        # Here you can add your ping logic if needed
+        # For now, we just print to indicate the bot is alive
+        LOGGER(__name__).info("Bot is alive and pinging...")
+        await asyncio.sleep(60)  # Ping every 60 seconds
 
 async def init():
     if (
@@ -61,6 +69,8 @@ async def init():
     LOGGER("BABYMUSIC").info(
         "╔═════ஜ۩۞۩ஜ════╗\n  ☠︎︎𝗠𝗔𝗗𝗘 𝗕𝗬 𝗠𝗥 𝗨𝗧𝗧𝗔𝗠★𝗥𝗔𝗧𝗛𝗢𝗥𝗘\n╚═════ஜ۩۞۩ஜ════╝"
     )
+    # Start the ping task
+    asyncio.create_task(ping())
     await idle()
     await app.stop()
     await userbot.stop()
