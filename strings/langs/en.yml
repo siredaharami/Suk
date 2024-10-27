@@ -184,6 +184,7 @@ NEXT_PAGE: ">"
 BACK_PAGE: "<"
 
 
+SO_B_1 : "Add"
 S_B_1 : "Add Me Your Group"
 S_B_2 : "Support"
 S_B_3 : "Tap to see magic 🪄"
