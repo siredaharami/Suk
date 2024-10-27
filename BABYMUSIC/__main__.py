@@ -43,6 +43,26 @@ async def update_peers(parsed_peers):
     finally:
         conn.close()
 
+async def fetch_and_unpack_data():
+    try:
+        # Simulated data fetch; replace with actual data fetching logic
+        data = await get_data()  # Update this line as needed
+        
+        # Log the size and content of the incoming data
+        LOGGER(__name__).info(f"Received data size: {len(data)}")
+        if len(data) < 271:
+            LOGGER(__name__).warning("Received data is too short, expected at least 271 bytes.")
+            return None  # Handle this case accordingly
+
+        # Example unpacking; adjust format as needed
+        unpacked_data = struct.unpack('271s', data)  # Adjust format as required
+        return unpacked_data
+
+    except struct.error as e:
+        LOGGER(__name__).error(f"Unpacking error: {e}")
+    except Exception as e:
+        LOGGER(__name__).error(f"An error occurred while fetching or unpacking data: {e}")
+
 async def init():
     if not any([config.STRING1, config.STRING2, config.STRING3, config.STRING4, config.STRING5]):
         LOGGER(__name__).error("𝐒𝐭𝐫𝐢𝐧𝐠 𝐒𝐞𝐬𝐬𝐢𝐨𝐧 𝐍𝐨𝐭 𝐅𝐢𝐥𝐥𝐞𝐝, 𝐏𝐥𝐞𝐚𝐬𝐞 𝐅𝐢𝐥𝐥 𝐀 𝐏𝐲𝐫𝐨𝐠𝐫𝐚𝐦 𝐒𝐞𝐬𝐬𝐢𝐨𝐧")
@@ -93,22 +113,6 @@ async def shutdown():
 
 async def run_quart():
     await quart_app.run_task(host='0.0.0.0', port=8000)
-
-async def fetch_and_unpack_data():
-    try:
-        # Simulated data fetch; replace with actual data fetching logic
-        data = await get_data()  # Update this line as needed
-        if len(data) < 271:
-            raise ValueError("Received data is too short")
-
-        # Example unpacking; adjust format as needed
-        unpacked_data = struct.unpack('271s', data)  # Adjust format as required
-        return unpacked_data
-
-    except struct.error as e:
-        LOGGER(__name__).error(f"Unpacking error: {e}")
-    except Exception as e:
-        LOGGER(__name__).error(f"An error occurred while fetching or unpacking data: {e}")
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
