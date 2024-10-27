@@ -214,6 +214,7 @@ async def stream(
         else:
     if not forceplay:
         db[chat_id] = []
+    
     await BABY.join_call(chat_id, original_chat_id, file_path, video=None)
     await put_queue(
         chat_id,
@@ -227,6 +228,7 @@ async def stream(
         "audio",
         forceplay=forceplay,
     )
+
     button = stream_markup(_, chat_id)
     run = await app.send_text(
         chat_id=original_chat_id,
