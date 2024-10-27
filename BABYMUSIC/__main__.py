@@ -1,6 +1,7 @@
 import asyncio
 import importlib
-from aiohttp import web
+from flask import Flask
+from threading import Thread
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
 
@@ -51,29 +52,22 @@ async def init():
     LOGGER("BABYMUSIC").info("𝗦𝗧𝗢𝗣 𝗕𝗔𝗕𝗬 𝗠𝗨𝗦𝗜𝗖🎻 𝗕𝗢𝗧..")
 
 
-async def start_server():
-    web_app = web.Application()
+def start_flask():
+    flask_app = Flask(__name__)
 
-    async def handle(request):
-        return web.Response(text="Hello, this is BABYMUSIC server!")
+    @flask_app.route('/')
+    def home():
+        return "Hello, this is BABYMUSIC server!"
 
-    web_app.router.add_get('/', handle)
-
-    runner = web.AppRunner(web_app)
-    await runner.setup()
-    try:
-        site = web.TCPSite(runner, '0.0.0.0', 8000)  # Listen on all interfaces
-        await site.start()
-        LOGGER(__name__).info("Server started on http://0.0.0.0:8000")
-    except Exception as e:
-        LOGGER(__name__).error(f"Error starting server: {e}")
+    flask_app.run(host='0.0.0.0', port=8000)
 
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    try:
-        loop.run_until_complete(init())
-        loop.run_until_complete(start_server())
-        loop.run_forever()
-    except Exception as e:
-        LOGGER(__name__).error(f"Error in main loop: {e}")
+    
+    # Start the bot in a separate thread
+    bot_thread = Thread(target=lambda: loop.run_until_complete(init()))
+    bot_thread.start()
+
+    # Start Flask server
+    start_flask()
