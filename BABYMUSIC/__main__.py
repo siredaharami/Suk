@@ -29,6 +29,7 @@ def keep_alive():
         except Exception as e:
             print(f"Ping error: {e}")
         time.sleep(300)  # Ping every 5 minutes
+    await idle()
 
 async def init():
     if (
