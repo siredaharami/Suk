@@ -2,7 +2,6 @@ from datetime import datetime
 
 from pyrogram import filters
 from pyrogram.types import Message
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
 from config import *
 from BABYMUSIC import app
 from BABYMUSIC.core.call import BABY
@@ -16,9 +15,9 @@ from config import BANNED_USERS
 @language
 async def ping_com(client, message: Message, _):
     start = datetime.now()
-    response = await message.reply_video(
-        video="https://graph.org/file/5690109178f081adf464d.mp4",
-        caption=_["ping_1"].format(app.mention),
+    # Changed from reply_video to reply
+    response = await message.reply(
+        text=_["ping_1"].format(app.mention),
     )
     pytgping = await BABY.ping()
     UP, CPU, RAM, DISK = await bot_sys_stats()
