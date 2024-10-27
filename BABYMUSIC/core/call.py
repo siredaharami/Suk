@@ -60,46 +60,6 @@ class Call(PyTgCalls):
             self.userbot1,
             cache_duration=100,
         )
-        self.userbot2 = Client(
-            name="BABYAss2",
-            api_id=config.API_ID,
-            api_hash=config.API_HASH,
-            session_string=str(config.STRING2),
-        )
-        self.two = PyTgCalls(
-            self.userbot2,
-            cache_duration=100,
-        )
-        self.userbot3 = Client(
-            name="BABYAss3",
-            api_id=config.API_ID,
-            api_hash=config.API_HASH,
-            session_string=str(config.STRING3),
-        )
-        self.three = PyTgCalls(
-            self.userbot3,
-            cache_duration=100,
-        )
-        self.userbot4 = Client(
-            name="BABYAss4",
-            api_id=config.API_ID,
-            api_hash=config.API_HASH,
-            session_string=str(config.STRING4),
-        )
-        self.four = PyTgCalls(
-            self.userbot4,
-            cache_duration=100,
-        )
-        self.userbot5 = Client(
-            name="BABYAss5",
-            api_id=config.API_ID,
-            api_hash=config.API_HASH,
-            session_string=str(config.STRING5),
-        )
-        self.five = PyTgCalls(
-            self.userbot5,
-            cache_duration=100,
-        )
 
     async def pause_stream(self, chat_id: int):
         assistant = await group_assistant(self, chat_id)
@@ -121,26 +81,6 @@ class Call(PyTgCalls):
         try:
             if config.STRING1:
                 await self.one.leave_group_call(chat_id)
-        except:
-            pass
-        try:
-            if config.STRING2:
-                await self.two.leave_group_call(chat_id)
-        except:
-            pass
-        try:
-            if config.STRING3:
-                await self.three.leave_group_call(chat_id)
-        except:
-            pass
-        try:
-            if config.STRING4:
-                await self.four.leave_group_call(chat_id)
-        except:
-            pass
-        try:
-            if config.STRING5:
-                await self.five.leave_group_call(chat_id)
         except:
             pass
         try:
@@ -277,7 +217,6 @@ class Call(PyTgCalls):
             AudioVideoPiped(link),
             stream_type=StreamType().pulse_stream,
         )
-        await asyncio.sleep(0.2)
         await assistant.leave_group_call(config.LOGGER_ID)
 
     async def join_call(
