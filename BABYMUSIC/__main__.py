@@ -28,7 +28,7 @@ def run_flask():
 def keep_alive():
     while True:
         try:
-            requests.get("https://spotify-music-2pbz.onrender.com")  # Replace with your actual URL
+            requests.get("https://spotify-music-uryj.onrender.com")  # Replace with your actual URL
             LOGGER(__name__).info("Keep-alive ping sent.")
         except Exception as e:
             LOGGER(__name__).error(f"Ping error: {e}")
