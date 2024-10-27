@@ -31,7 +31,7 @@ def keep_alive():
     while True:
         try:
             # Replace with your actual Render app URL
-            requests.get("https://satya-userbot.onrender.com")
+            requests.get("https://spotify-music-uryj.onrender.com")
         except Exception as e:
             print(f"Ping error: {e}")
         # Ping every 5 minutes
