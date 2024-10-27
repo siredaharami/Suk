@@ -20,11 +20,11 @@ flask_app = Flask(__name__)
 # Flask app basic route
 @flask_app.route('/')
 def home():
-    return "Flask app running on port 8000"
+    return "Flask app running on port 10000"
 
 # Run Flask app in a separate thread
 def run_flask():
-    flask_app.run(host="0.0.0.0", port=8000)
+    flask_app.run(host="0.0.0.0", port=10000)  # Changed port to 10000
 
 # Keep-alive function to send regular pings
 def keep_alive():
