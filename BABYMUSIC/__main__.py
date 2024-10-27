@@ -20,22 +20,16 @@ flask_app = Flask(__name__)
 # Flask app basic route
 @flask_app.route('/')
 def home():
-    return "Flask app running on port 10000"
-
-# Run Flask app in a separate thread
-def run_flask():
-    flask_app.run(host="0.0.0.0", port=10000)  # Changed port to 10000
+    return "Flask app running on port 8000"
 
 # Keep-alive function to send regular pings
 def keep_alive():
     while True:
         try:
-            # Replace with your actual Render app URL
             requests.get("https://spotify-music-uryj.onrender.com")
         except Exception as e:
             print(f"Ping error: {e}")
-        # Ping every 5 minutes
-        time.sleep(300)
+        time.sleep(300)  # Ping every 5 minutes
 
 async def start_bot():
     await app.start()
@@ -74,7 +68,7 @@ async def init():
     
     await app.start()
     for all_module in ALL_MODULES:
-        importlib.import_module("BABYMUSIC.plugins" + all_module)
+        importlib.import_module("BABYMUSIC.plugins." + all_module)
     
     LOGGER("BABYMUSIC.plugins").info("All Features Loaded Baby🥳...")
     await userbot.start()
@@ -94,10 +88,15 @@ async def init():
     LOGGER("BABYMUSIC").info(
         "╔═════ஜ۩۞۩ஜ════╗\n  ☠︎︎MADE BY MR UTTAM★RATHORE\n╚═════ஜ۩۞۩ஜ════╝"
     )
+    
+    # The app will not reach this if idle() is called first
     await idle()
     await app.stop()
     await userbot.stop()
     LOGGER("BABYMUSIC").info("STOP BABY MUSIC🎻 BOT..")
+
+def run_flask():
+    flask_app.run(host='0.0.0.0', port=8000)
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
