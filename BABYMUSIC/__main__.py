@@ -1,5 +1,6 @@
 import asyncio
 import importlib
+import struct
 from quart import Quart
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
@@ -59,6 +60,7 @@ async def init():
     await BABY.decorators()
     LOGGER("BABYMUSIC").info("╔═════ஜ۩۞۩ஜ════╗\n  ☠︎︎𝗠𝗔𝗗𝗘 𝗕𝗬 𝗠𝗥 𝗨𝗧𝗧𝗔𝗠★𝗥𝗔𝗧𝗛𝗢𝗥𝗘\n╚═════ஜ۩۞۩ஜ════╝")
 
+    # Keeping the bot alive with a heartbeat
     while True:
         await asyncio.sleep(60)
 
@@ -69,6 +71,22 @@ async def shutdown():
 
 async def run_quart():
     await quart_app.run_task(host='0.0.0.0', port=8000)
+
+async def fetch_and_unpack_data():
+    try:
+        # Simulated data fetch; replace with actual data fetching logic
+        data = await get_data()  # Update this line as needed
+        if len(data) < 271:
+            raise ValueError("Received data is too short")
+
+        # Example unpacking; adjust format as needed
+        unpacked_data = struct.unpack('271s', data)  # Adjust format as required
+        return unpacked_data
+
+    except struct.error as e:
+        LOGGER(__name__).error(f"Unpacking error: {e}")
+    except Exception as e:
+        LOGGER(__name__).error(f"An error occurred while fetching or unpacking data: {e}")
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
