@@ -10,7 +10,7 @@ from BABYMUSIC.core.call import BABY
 from BABYMUSIC.misc import db
 from BABYMUSIC.utils.database import add_active_video_chat, is_active_chat
 from BABYMUSIC.utils.exceptions import AssistantErr
-from BABYMUSIC.utils.inline import aq_markup, close_markup
+from BABYMUSIC.utils.inline import aq_markup, close_markup, stream_markup
 from BABYMUSIC.utils.stream.queue import put_queue, put_queue_index
 
 
