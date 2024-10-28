@@ -9,10 +9,10 @@ from pyrogram import filters
 load_dotenv()
 # ------------------------------------
 # -----------------------------------------------------
-API_ID = int(getenv("API_ID", "16457832"))
-API_HASH = getenv("API_HASH", "3030874d0befdb5d05597deacc3e83ab")
+API_ID = int(getenv("API_ID", ""))
+API_HASH = getenv("API_HASH", "")
 # ------------------------------------------------------
-BOT_TOKEN = getenv("BOT_TOKEN", "7383809543:AAEMjZHs2sF7aWKmDBZKzHAPtQyTNhBzv3Q")
+BOT_TOKEN = getenv("BOT_TOKEN", "")
 # -------------------------------------------------------
 OWNER_USERNAME = getenv("OWNER_USERNAME","@UTTAM470")
 # --------------------------------------------------------
@@ -26,7 +26,7 @@ ASSUSERNAME = getenv("ASSUSERNAME" , "╼⃝𖠁 𝐁ʌʙʏ ꭙ 𝐌ᴜsɪᴄ �
 
 #---------------------------------------------------------------
 #---------------------------------------------------------------
-MONGO_DB_URI = getenv("MONGO_DB_URI", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09@cluster0.vmjl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+MONGO_DB_URI = getenv("MONGO_DB_URI", "")
 #---------------------------------------------------------------
 #---------------------------------------------------------------
 
@@ -116,7 +116,7 @@ TG_VIDEO_FILESIZE_LIMIT = int(getenv("TG_VIDEO_FILESIZE_LIMIT", "5242880000"))
 # ------------------------------------
 # ------------------------------------
 # ------------------------------------
-STRING1 = getenv("STRING_SESSION", "BQCZzqEACIbndbvB1LyMS6eFk5jieQqUKdAUtXylYcQ7-CVdX35DhP-p5aTwlXvGrNp3T2UOrcZhig3IkONGPtflDJ8L1d7DQta76__TBSlfGsJUukSCqlAuOJED6y3-vPTDo4jejkoKaiNlZ_IPWoC3aZrlnOv2eyJDTRHWzDNExFD8Lu7UyAeUPWQZ2H6DkVxVl9GN4erBzaG99SjCk7mZ6yKBDxm3xmNxcyOZjPVliuJgSN03RRyo_zzsWmZOEUXKuHwJcvK7G7HW1GiRRLdTqeSh9Edx8ZmzzwAGdxdQMqONspgFaOOX534uzx7rx8QUtTOxkn9uIXmsLQSS23o8wNaFVgAAAAGugN_jAA")
+STRING1 = getenv("STRING_SESSION", "")
 BANNED_USERS = filters.user()
 adminlist = {}
 lyrical = {}
