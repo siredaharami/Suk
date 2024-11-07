@@ -4,17 +4,29 @@ import time
 from BABYMUSIC import app
 import requests
 from pyrogram.types import Message
-from pyrogram.types import InputMediaPhoto
-from teambabyAPI import api
 from pyrogram.enums import ChatAction, ParseMode
 from pyrogram import filters
 
-# Hugging Face API URL for question answering
+# Hugging Face API URL and key
 API_URL = "https://api-inference.huggingface.co/models/deepset/roberta-base-squad2"
-
-# Hugging Face API Key (Apna API key yahaan likhein)
 API_KEY = "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"
 
+# Predefined answers for certain general knowledge queries
+state_governors = {
+    "india": "India does not have a single governor. Each state in India has its own governor appointed by the President.",
+    "maharashtra": "The current governor of Maharashtra (as of 2023) is Ramesh Bais.",
+    # Add more states and their governors if required
+}
+
+# Function to evaluate mathematical expressions
+def evaluate_math_expression(expression):
+    try:
+        result = eval(expression, {"__builtins__": {}}, {})
+        return str(result)
+    except Exception as e:
+        return "Error: Unable to evaluate the expression."
+
+# Function to call Hugging Face API for general questions
 def get_answer_from_hugging_face(question, context, retries=3, wait_time=20):
     headers = {
         "Authorization": f"Bearer {API_KEY}"
@@ -72,19 +84,28 @@ async def chat_gpt(bot, message):
                 "❍ ᴇxᴀᴍᴘʟᴇ:**\n\n/chatgpt ᴡʜᴏ ɪs ᴛʜᴇ ᴏᴡɴᴇʀ ᴏғ ˹ ʙʙʏ-ᴍᴜsɪᴄ ™˼𓅂?"
             )
         else:
-            question = message.text.split(' ', 1)[1]
+            question = message.text.split(' ', 1)[1].strip().lower()
             
-            # Static context with general political information
-            context = """
-            The President of India is the head of state, and the Prime Minister is the head of government. 
-            India also has Governors who are appointed for each state. 
-            The President appoints Governors for Indian states. 
-            The current President of India (as of 2023) is Droupadi Murmu, and the Prime Minister is Narendra Modi.
-            Governors have roles at the state level and are appointed by the central government.
-            """
+            # Check if it's a math expression
+            if re.match(r'^[\d+\-*/.() ]+$', question):
+                answer = evaluate_math_expression(question)
             
-            # Get answer from Hugging Face with retry logic
-            answer = get_answer_from_hugging_face(question, context)
+            # Check if it's a predefined general knowledge query
+            elif any(keyword in question for keyword in ["governor", "president", "prime minister"]):
+                # Extract relevant keyword from the question for predefined answers
+                state = question.split()[-1]  # Extract last word as a state or country
+                answer = state_governors.get(state, None)
+                if not answer:
+                    answer = "I don't have information about that specific location."
+            
+            # For other questions, use Hugging Face API
+            else:
+                context = """
+                The President of India is the head of state, and the Prime Minister is the head of government. 
+                Each state in India has a Governor appointed by the President. 
+                India is a democratic country with various administrative divisions.
+                """
+                answer = get_answer_from_hugging_face(question, context)
             
             await message.reply_text(
                 f"**Answer from AI:**\n\n{answer}\n\n❍ᴘᴏᴡᴇʀᴇᴅ ʙʏ➛[ʙʧʙʏ-ᴍᴜsɪᴄ™](https://t.me/BABY09_WORLD)", 
