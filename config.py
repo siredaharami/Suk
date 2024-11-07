@@ -42,7 +42,7 @@ OWNER_ID = int(getenv("OWNER_ID", "7131351568"))
 # -----------------------------------------------------------------
 # -----------------------------------------------------------------
 # config.py
-OPENAI_API_KEY = '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'
+OPENAI_API_KEY = 'sk-svcacct-P6WzUuDoe32FfmEZAPYHvXxym4gRpzFDJj8R3LTWvZ1bPQaDLNr0cP9bWinT3BlbkFJf2zLaAxMRLSfocVQkLP0ksWaJPVl4SwHwCEFT_mvnbIujjvt0_cqmjh7gCwA'
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------
