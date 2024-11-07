@@ -15,16 +15,6 @@ API_URL = "https://api-inference.huggingface.co/models/deepset/roberta-base-squa
 # Hugging Face API Key (Apna API key yahaan likhein)
 API_KEY = "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"
 
-# Function to evaluate mathematical expressions
-def evaluate_math_expression(expression):
-    try:
-        # Safe evaluation for simple arithmetic expressions
-        result = eval(expression, {"__builtins__": {}}, {})
-        return str(result)
-    except Exception as e:
-        return "Error: Unable to evaluate the expression."
-
-# Function to call Hugging Face API for non-math questions
 def get_answer_from_hugging_face(question, context, retries=3, wait_time=20):
     headers = {
         "Authorization": f"Bearer {API_KEY}"
@@ -75,7 +65,6 @@ def get_answer_from_hugging_face(question, context, retries=3, wait_time=20):
 )
 async def chat_gpt(bot, message):
     try:
-        # Show typing action to indicate bot is processing
         await bot.send_chat_action(message.chat.id, ChatAction.TYPING)
         
         if len(message.command) < 2:
@@ -83,19 +72,20 @@ async def chat_gpt(bot, message):
                 "❍ ᴇxᴀᴍᴘʟᴇ:**\n\n/chatgpt ᴡʜᴏ ɪs ᴛʜᴇ ᴏᴡɴᴇʀ ᴏғ ˹ ʙʙʏ-ᴍᴜsɪᴄ ™˼𓅂?"
             )
         else:
-            question = message.text.split(' ', 1)[1]  # Extract user question
+            question = message.text.split(' ', 1)[1]
             
-            # Check if question is a simple math expression
-            if re.match(r'^[\d+\-*/.() ]+$', question):  # regex for basic math
-                answer = evaluate_math_expression(question)
-            else:
-                # Non-math questions use context and Hugging Face API
-                context = """
-                Taj Mahal is a famous historical monument located in Agra, India. It was built by the Mughal Emperor Shah Jahan in memory of his beloved wife Mumtaz Mahal.
-                """
-                answer = get_answer_from_hugging_face(question, context)
+            # Static context with general political information
+            context = """
+            The President of India is the head of state, and the Prime Minister is the head of government. 
+            India also has Governors who are appointed for each state. 
+            The President appoints Governors for Indian states. 
+            The current President of India (as of 2023) is Droupadi Murmu, and the Prime Minister is Narendra Modi.
+            Governors have roles at the state level and are appointed by the central government.
+            """
             
-            # Send the response to the user
+            # Get answer from Hugging Face with retry logic
+            answer = get_answer_from_hugging_face(question, context)
+            
             await message.reply_text(
                 f"**Answer from AI:**\n\n{answer}\n\n❍ᴘᴏᴡᴇʀᴇᴅ ʙʏ➛[ʙʧʙʏ-ᴍᴜsɪᴄ™](https://t.me/BABY09_WORLD)", 
                 parse_mode=ParseMode.MARKDOWN
