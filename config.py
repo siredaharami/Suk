@@ -41,7 +41,8 @@ LOGGER_ID = int(getenv("LOGGER_ID", "-1002043570167"))
 OWNER_ID = int(getenv("OWNER_ID", "7400383704"))
 # -----------------------------------------------------------------
 # -----------------------------------------------------------------
-
+# config.py
+OPENAI_API_KEY = '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'
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------
