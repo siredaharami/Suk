@@ -117,7 +117,7 @@ TG_VIDEO_FILESIZE_LIMIT = int(getenv("TG_VIDEO_FILESIZE_LIMIT", "5242880000"))
 # ------------------------------------
 # ------------------------------------
 # ------------------------------------
-STRING1 = getenv("STRING_SESSION", "")
+STRING1 = getenv("STRING_SESSION", "BQD7IGgAiCF8QQ9Yzgzdl6bM3UpgoX2sxxORyNZ5dMB8f6X3ih-7R5JOgSSJ9vm7urU53hRfYpIunTLs0lNvlV2iyUVSllSedI-_8HntgUavk5MjPizZAPOMkgbwMTmAJLR6lIGXy3aJQWlyGKJ5Sm4IYX-t7LdJXtaK3fSwDe6cDZEy3pqJmXwYzSQj9PwTVVr5--wVXv9WQCeNvC4NVyM2qKRTLmNrZFSy5f0DNs7ZgfpKrF92YQiRVHbn6IL9Y4Y7G_3Zsiaf_3fhUngjW7HPiQqeB6DyIEFoxjajaZzYN8VN6NA2rxP9JgW7sw29E9w_X3JUupJrwCmHvGVoYlLrhCSYGAAAAAGpD8oQAA")
 BANNED_USERS = filters.user()
 adminlist = {}
 lyrical = {}
