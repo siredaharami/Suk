@@ -9,12 +9,12 @@ from pyrogram.enums import ChatAction, ParseMode
 from pyrogram import filters
 
 # Hugging Face API URL for question answering
-API_URL = "https://api-inference.huggingface.co/models/deepset/roberta-base-squad2"  # updated model for better QA
+API_URL = "https://api-inference.huggingface.co/models/deepset/roberta-base-squad2"
 
 # Hugging Face API Key (Apna API key yahaan likhein)
 API_KEY = "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"
 
-# Function to call Hugging Face API with retry logic
+# Function to call Hugging Face API with retry logic and improved handling
 def get_answer_from_hugging_face(question, context, retries=3, wait_time=20):
     headers = {
         "Authorization": f"Bearer {API_KEY}"
@@ -30,12 +30,18 @@ def get_answer_from_hugging_face(question, context, retries=3, wait_time=20):
         try:
             response = requests.post(API_URL, headers=headers, json=payload)
             
-            # Check if the response is successful
             if response.status_code == 200:
                 result = response.json()
-                # Improved handling for different response structures
-                if isinstance(result, list) and "answer" in result[0]:
-                    return result[0]["answer"]
+                
+                # Improved handling for response content
+                if isinstance(result, dict) and 'answer' in result:
+                    answer = result['answer'].strip()
+                    # Check if the answer is non-empty and meaningful
+                    if answer and answer != "\n":
+                        return answer
+                    else:
+                        return "I couldn't find a specific answer in the provided context."
+                
                 elif "error" in result:
                     return f"API Error: {result['error']}"
                 else:
@@ -73,7 +79,7 @@ async def chat_gpt(bot, message):
         else:
             question = message.text.split(' ', 1)[1]  # Extract user question
             
-            # Context for the model, can be adjusted for specific questions or left as general
+            # Specific context for Taj Mahal question
             context = """
             Taj Mahal is a famous historical monument located in Agra, India. It was built by the Mughal Emperor Shah Jahan in memory of his beloved wife Mumtaz Mahal.
             """
