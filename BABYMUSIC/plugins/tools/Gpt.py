@@ -7,11 +7,10 @@ from pyrogram.types import InputMediaPhoto
 from teambabyAPI import api
 from pyrogram.enums import ChatAction, ParseMode
 from pyrogram import filters
-import openai
-from config import OPENAI_API_KEY  # Importing the API key from config.py
+from transformers import pipeline  # Hugging Face model import
 
-# Set the OpenAI API key from the config file
-openai.api_key = OPENAI_API_KEY
+# Load Hugging Face model for question answering
+qa_model = pipeline("question-answering", model="distilbert-base-uncased-distilled-squad")
 
 @app.on_message(
     filters.command(
@@ -30,15 +29,18 @@ async def chat_gpt(bot, message):
             )
         else:
             question = message.text.split(' ', 1)[1]  # Extracting the question
-            response = openai.Completion.create(
-                engine="gpt-3.5-turbo",  # You can choose the latest available model
-                prompt=question,
-                max_tokens=150
-            )
-            answer = response.choices[0].text.strip()  # Extracting the answer from GPT
+            
+            # Here, we assume the context is a static text or can be dynamically fetched
+            context = """
+            ˹ ʙʙʏ-ᴍᴜsɪᴄ ™˼𓅂 is a community platform for music lovers and people who enjoy lively discussions about various topics.
+            """
+            
+            # Use Hugging Face model to get the answer
+            result = qa_model(question=question, context=context)
+            answer = result['answer']
             
             await message.reply_text(
-                f"**Answer from ChatGPT:**\n\n{answer}\n\n❍ᴘᴏᴡᴇʀᴇᴅ ʙʏ➛[ʙʧʙʏ-ᴍᴜsɪᴄ™](https://t.me/BABY09_WORLD)", 
+                f"**Answer from AI:**\n\n{answer}\n\n❍ᴘᴏᴡᴇʀᴇᴅ ʙʏ➛[ʙʧʙʏ-ᴍᴜsɪᴄ™](https://t.me/BABY09_WORLD)", 
                 parse_mode=ParseMode.MARKDOWN
             )
     
