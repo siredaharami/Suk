@@ -11,13 +11,13 @@ from pyrogram import filters
 # Hugging Face API URL for question answering
 API_URL = "https://api-inference.huggingface.co/models/distilbert-base-uncased-distilled-squad"
 
-# Hugging Face API Key (Aapka API key yahaan likhein)
-API_KEY = "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"  # Aapka Hugging Face API Key
+# Hugging Face API Key (Apna API key yahaan likhein)
+API_KEY = "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"
 
-# Function jo Hugging Face API ko call karegi aur retry karegi
+# Function to call Hugging Face API with retry logic
 def get_answer_from_hugging_face(question, context, retries=3, wait_time=20):
     headers = {
-        "Authorization": f"Bearer {API_KEY}"  # Authorization header mein API key bhejna
+        "Authorization": f"Bearer {API_KEY}"
     }
     payload = {
         "inputs": {
@@ -28,24 +28,33 @@ def get_answer_from_hugging_face(question, context, retries=3, wait_time=20):
     
     for attempt in range(retries):
         try:
-            # Hugging Face API ko request bhejna
             response = requests.post(API_URL, headers=headers, json=payload)
             
-            # Agar request successful hai
+            # Check if the response is successful
             if response.status_code == 200:
                 result = response.json()
-                return result['answer']
+                # Checking if the 'answer' key is present
+                if 'answer' in result:
+                    return result['answer']
+                else:
+                    print("Unexpected response format:", result)
+                    return "Unexpected response format. Please check the API response."
+            
             elif response.status_code == 503:
-                # Agar model load ho raha ho, toh retry karenge
-                print(f"Model load ho raha hai, {wait_time} seconds baad try karenge...")
-                time.sleep(wait_time)  # Wait karein specified time ke liye
+                # Model loading; retry after waiting
+                print(f"Model loading, retrying in {wait_time} seconds...")
+                time.sleep(wait_time)
             else:
+                # Return error message for other status codes
+                print(f"API returned error: {response.status_code}, {response.text}")
                 return f"Error: {response.status_code}, {response.text}"
+        
         except Exception as e:
-            # Agar koi aur error aaye toh handle karein
+            # Log and return error for exception
+            print("Exception occurred:", e)
             return f"An error occurred: {e}"
     
-    return "Model abhi bhi load ho raha hai. Kripya kuch der baad try karein."
+    return "Model is still loading. Please try again later."
 
 @app.on_message(
     filters.command(
@@ -55,31 +64,31 @@ def get_answer_from_hugging_face(question, context, retries=3, wait_time=20):
 )
 async def chat_gpt(bot, message):
     try:
-        # Typing action bhejna, jisse user ko lage ki bot jawab de raha hai
+        # Show typing action to indicate bot is processing
         await bot.send_chat_action(message.chat.id, ChatAction.TYPING)
         
         if len(message.command) < 2:
-            # Agar user ne question nahi diya
+            # Reply if no question provided
             await message.reply_text(
                 "❍ ᴇxᴀᴍᴘʟᴇ:**\n\n/chatgpt ᴡʜᴏ ɪs ᴛʜᴇ ᴏᴡɴᴇʀ ᴏғ ˹ ʙʙʏ-ᴍᴜsɪᴄ ™˼𓅂?"
             )
         else:
-            question = message.text.split(' ', 1)[1]  # User ka question nikalna
+            question = message.text.split(' ', 1)[1]  # Extract user question
             
-            # Model ke liye context (aap isse dynamic ya static bana sakte hain)
+            # Define the context for the model
             context = """
             ˹ ʙʙʏ-ᴍᴜsɪᴄ ™˼𓅂 is a community platform for music lovers and people who enjoy lively discussions about various topics.
             """
             
-            # Hugging Face se answer lena retry logic ke saath
+            # Get answer from Hugging Face with retry logic
             answer = get_answer_from_hugging_face(question, context)
             
-            # User ko response bhejna
+            # Send the response to the user
             await message.reply_text(
                 f"**Answer from AI:**\n\n{answer}\n\n❍ᴘᴏᴡᴇʀᴇᴅ ʙʏ➛[ʙʧʙʏ-ᴍᴜsɪᴄ™](https://t.me/BABY09_WORLD)", 
                 parse_mode=ParseMode.MARKDOWN
             )
     
     except Exception as e:
-        # Agar koi error aaye toh user ko batayein
+        # Inform the user about the error
         await message.reply_text(f"**❍ ᴇʀʀᴏʀ: {e}**")
