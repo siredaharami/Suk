@@ -11,11 +11,12 @@ from pyrogram import filters
 API_URL = "https://api-inference.huggingface.co/models/deepset/roberta-base-squad2"
 API_KEY = "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"
 
-# Predefined answers for certain general knowledge queries
-state_governors = {
-    "india": "India does not have a single governor. Each state in India has its own governor appointed by the President.",
-    "maharashtra": "The current governor of Maharashtra (as of 2023) is Ramesh Bais.",
-    # Add more states and their governors if required
+# Predefined answers for certain general knowledge and locations
+predefined_answers = {
+    "taj mahal": "The Taj Mahal is located in Agra, Uttar Pradesh, India.",
+    "red fort": "The Red Fort is located in Delhi, India.",
+    "eiffel tower": "The Eiffel Tower is located in Paris, France.",
+    # Add more predefined locations or general knowledge answers as needed
 }
 
 # Function to evaluate mathematical expressions
@@ -90,20 +91,17 @@ async def chat_gpt(bot, message):
             if re.match(r'^[\d+\-*/.() ]+$', question):
                 answer = evaluate_math_expression(question)
             
-            # Check if it's a predefined general knowledge query
-            elif any(keyword in question for keyword in ["governor", "president", "prime minister"]):
-                # Extract relevant keyword from the question for predefined answers
-                state = question.split()[-1]  # Extract last word as a state or country
-                answer = state_governors.get(state, None)
-                if not answer:
-                    answer = "I don't have information about that specific location."
+            # Check if it's in predefined answers (locations or general knowledge)
+            elif question in predefined_answers:
+                answer = predefined_answers[question]
             
             # For other questions, use Hugging Face API
             else:
                 context = """
                 The President of India is the head of state, and the Prime Minister is the head of government. 
-                Each state in India has a Governor appointed by the President. 
-                India is a democratic country with various administrative divisions.
+                Each state in India has a Governor appointed by the President. India is a country known for its 
+                diverse culture, history, and architecture. Popular landmarks include the Taj Mahal in Agra,
+                the Red Fort in Delhi, and the Gateway of India in Mumbai.
                 """
                 answer = get_answer_from_hugging_face(question, context)
             
