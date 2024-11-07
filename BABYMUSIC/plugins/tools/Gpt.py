@@ -31,7 +31,7 @@ async def chat_gpt(bot, message):
         else:
             question = message.text.split(' ', 1)[1]  # Extracting the question
             response = openai.Completion.create(
-                engine="text-davinci-003",  # You can choose the latest available model
+                engine="gpt-3.5-turbo",  # You can choose the latest available model
                 prompt=question,
                 max_tokens=150
             )
