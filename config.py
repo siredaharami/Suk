@@ -12,7 +12,7 @@ load_dotenv()
 API_ID = int(getenv("API_ID", "22330484"))
 API_HASH = getenv("API_HASH", "62a583e3d56ffbdae56276032221dc10")
 # ------------------------------------------------------
-BOT_TOKEN = getenv("BOT_TOKEN", "7893206132:AAEcwiPmPdRw-dm1Z_-7aQbz8bdoMQJshUU")
+BOT_TOKEN = getenv("BOT_TOKEN", "7472927630:AAEuDC115Uktgo6x2_rlUWFyKzjfizwCK3o")
 # -------------------------------------------------------
 OWNER_USERNAME = getenv("OWNER_USERNAME","@UTTAM470")
 # --------------------------------------------------------
