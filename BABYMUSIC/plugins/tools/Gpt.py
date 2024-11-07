@@ -11,13 +11,13 @@ from pyrogram import filters
 # Hugging Face API URL for question answering
 API_URL = "https://api-inference.huggingface.co/models/distilbert-base-uncased-distilled-squad"
 
-# Replace with your Hugging Face API Key
-API_KEY = "your_huggingface_api_key"  # Make sure to replace this with your actual API key
+# Hugging Face API Key (Replace with your actual API key)
+API_KEY = "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"  # Your provided API key
 
 # Function to query Hugging Face API for question answering
 def get_answer_from_hugging_face(question, context):
     headers = {
-        "Authorization": f"Bearer {API_KEY}"
+        "Authorization": f"Bearer {API_KEY}"  # Use Bearer token for authorization
     }
     payload = {
         "inputs": {
@@ -44,18 +44,19 @@ def get_answer_from_hugging_face(question, context):
     )
 )
 async def chat_gpt(bot, message):
-    
     try:
+        # Typing action to indicate that bot is processing the request
         await bot.send_chat_action(message.chat.id, ChatAction.TYPING)
         
         if len(message.command) < 2:
+            # If no question is provided
             await message.reply_text(
-                "❍ ᴇxᴀᴍᴘʟᴇ:**\n\n/chatgpt ᴡʜᴏ ɪs ᴛʜᴇ ᴏᴡɴᴇʀ ᴏғ ˹ ʙᴀʙʏ-ᴍᴜsɪᴄ ™˼𓅂?"
+                "❍ ᴇxᴀᴍᴘʟᴇ:**\n\n/chatgpt ᴡʜᴏ ɪs ᴛʜᴇ ᴏᴡɴᴇʀ ᴏғ ˹ ʙʙʏ-ᴍᴜsɪᴄ ™˼𓅂?"
             )
         else:
             question = message.text.split(' ', 1)[1]  # Extracting the question
             
-            # Context (static text or dynamic content)
+            # Context for the question-answering model (can be static or dynamic)
             context = """
             ˹ ʙʙʏ-ᴍᴜsɪᴄ ™˼𓅂 is a community platform for music lovers and people who enjoy lively discussions about various topics.
             """
@@ -63,11 +64,12 @@ async def chat_gpt(bot, message):
             # Get the answer from Hugging Face API
             answer = get_answer_from_hugging_face(question, context)
             
-            # Reply with the answer from the model
+            # Send the response back to the user
             await message.reply_text(
                 f"**Answer from AI:**\n\n{answer}\n\n❍ᴘᴏᴡᴇʀᴇᴅ ʙʏ➛[ʙʧʙʏ-ᴍᴜsɪᴄ™](https://t.me/BABY09_WORLD)", 
                 parse_mode=ParseMode.MARKDOWN
             )
     
     except Exception as e:
+        # In case of any error
         await message.reply_text(f"**❍ ᴇʀʀᴏʀ: {e}**")
