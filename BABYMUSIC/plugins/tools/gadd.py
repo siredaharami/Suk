@@ -3,8 +3,8 @@ import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 OWNERS = "7131351568"
-from SONALI import app
-from SONALI.utils.database import add_served_chat, get_assistant
+from BABYMUSIC import app
+from BABYMUSIC.utils.database import add_served_chat, get_assistant
 
 
 @app.on_message(filters.command("gadd") & filters.user(int(OWNERS)))
