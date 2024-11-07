@@ -9,7 +9,7 @@ from pyrogram.enums import ChatAction, ParseMode
 from pyrogram import filters
 
 # Hugging Face API URL for question answering
-API_URL = "https://api-inference.huggingface.co/models/distilbert-base-uncased-distilled-squad"
+API_URL = "https://api-inference.huggingface.co/models/deepset/roberta-base-squad2"  # updated model for better QA
 
 # Hugging Face API Key (Apna API key yahaan likhein)
 API_KEY = "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"
@@ -33,24 +33,23 @@ def get_answer_from_hugging_face(question, context, retries=3, wait_time=20):
             # Check if the response is successful
             if response.status_code == 200:
                 result = response.json()
-                # Checking if the 'answer' key is present
-                if 'answer' in result:
-                    return result['answer']
+                # Improved handling for different response structures
+                if isinstance(result, list) and "answer" in result[0]:
+                    return result[0]["answer"]
+                elif "error" in result:
+                    return f"API Error: {result['error']}"
                 else:
-                    print("Unexpected response format:", result)
-                    return "Unexpected response format. Please check the API response."
+                    print("Unexpected response structure:", result)
+                    return "Unexpected response format. Please check API response."
             
             elif response.status_code == 503:
-                # Model loading; retry after waiting
                 print(f"Model loading, retrying in {wait_time} seconds...")
                 time.sleep(wait_time)
             else:
-                # Return error message for other status codes
                 print(f"API returned error: {response.status_code}, {response.text}")
                 return f"Error: {response.status_code}, {response.text}"
         
         except Exception as e:
-            # Log and return error for exception
             print("Exception occurred:", e)
             return f"An error occurred: {e}"
     
@@ -68,16 +67,15 @@ async def chat_gpt(bot, message):
         await bot.send_chat_action(message.chat.id, ChatAction.TYPING)
         
         if len(message.command) < 2:
-            # Reply if no question provided
             await message.reply_text(
                 "❍ ᴇxᴀᴍᴘʟᴇ:**\n\n/chatgpt ᴡʜᴏ ɪs ᴛʜᴇ ᴏᴡɴᴇʀ ᴏғ ˹ ʙʙʏ-ᴍᴜsɪᴄ ™˼𓅂?"
             )
         else:
             question = message.text.split(' ', 1)[1]  # Extract user question
             
-            # Define the context for the model
+            # Context for the model, can be adjusted for specific questions or left as general
             context = """
-            ˹ ʙʙʏ-ᴍᴜsɪᴄ ™˼𓅂 is a community platform for music lovers and people who enjoy lively discussions about various topics.
+            Taj Mahal is a famous historical monument located in Agra, India. It was built by the Mughal Emperor Shah Jahan in memory of his beloved wife Mumtaz Mahal.
             """
             
             # Get answer from Hugging Face with retry logic
@@ -90,5 +88,4 @@ async def chat_gpt(bot, message):
             )
     
     except Exception as e:
-        # Inform the user about the error
         await message.reply_text(f"**❍ ᴇʀʀᴏʀ: {e}**")
