@@ -1,3 +1,4 @@
+import re
 import random
 import time
 from BABYMUSIC import app
@@ -14,7 +15,16 @@ API_URL = "https://api-inference.huggingface.co/models/deepset/roberta-base-squa
 # Hugging Face API Key (Apna API key yahaan likhein)
 API_KEY = "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"
 
-# Function to call Hugging Face API with retry logic and improved handling
+# Function to evaluate mathematical expressions
+def evaluate_math_expression(expression):
+    try:
+        # Safe evaluation for simple arithmetic expressions
+        result = eval(expression, {"__builtins__": {}}, {})
+        return str(result)
+    except Exception as e:
+        return "Error: Unable to evaluate the expression."
+
+# Function to call Hugging Face API for non-math questions
 def get_answer_from_hugging_face(question, context, retries=3, wait_time=20):
     headers = {
         "Authorization": f"Bearer {API_KEY}"
@@ -32,16 +42,12 @@ def get_answer_from_hugging_face(question, context, retries=3, wait_time=20):
             
             if response.status_code == 200:
                 result = response.json()
-                
-                # Improved handling for response content
                 if isinstance(result, dict) and 'answer' in result:
                     answer = result['answer'].strip()
-                    # Check if the answer is non-empty and meaningful
                     if answer and answer != "\n":
                         return answer
                     else:
                         return "I couldn't find a specific answer in the provided context."
-                
                 elif "error" in result:
                     return f"API Error: {result['error']}"
                 else:
@@ -79,13 +85,15 @@ async def chat_gpt(bot, message):
         else:
             question = message.text.split(' ', 1)[1]  # Extract user question
             
-            # Specific context for Taj Mahal question
-            context = """
-            Taj Mahal is a famous historical monument located in Agra, India. It was built by the Mughal Emperor Shah Jahan in memory of his beloved wife Mumtaz Mahal.
-            """
-            
-            # Get answer from Hugging Face with retry logic
-            answer = get_answer_from_hugging_face(question, context)
+            # Check if question is a simple math expression
+            if re.match(r'^[\d+\-*/.() ]+$', question):  # regex for basic math
+                answer = evaluate_math_expression(question)
+            else:
+                # Non-math questions use context and Hugging Face API
+                context = """
+                Taj Mahal is a famous historical monument located in Agra, India. It was built by the Mughal Emperor Shah Jahan in memory of his beloved wife Mumtaz Mahal.
+                """
+                answer = get_answer_from_hugging_face(question, context)
             
             # Send the response to the user
             await message.reply_text(
