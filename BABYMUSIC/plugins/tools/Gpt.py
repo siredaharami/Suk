@@ -49,8 +49,10 @@ async def chat_gpt(bot, message):
             print("Status Code:", response.status_code)  # Check the status code
 
             # If the response is empty or not successful, handle the error
-            if response.status_code != 200 or not response.text.strip():
-                await message.reply_text("❍ ᴇʀʀᴏʀ: API se koi valid data nahi mil raha hai.")
+            if response.status_code != 200:
+                await message.reply_text("❍ ᴇʀʀᴏʀ: API request failed. Status code: " + str(response.status_code))
+            elif not response.text.strip():
+                await message.reply_text("❍ ᴇʀʀᴏʀ: API se koi valid data nahi mil raha hai. Response was empty.")
             else:
                 # Attempt to parse the JSON response
                 try:
