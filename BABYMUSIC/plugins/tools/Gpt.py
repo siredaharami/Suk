@@ -3,7 +3,7 @@ from BABYMUSIC import app
 from pyrogram.types import Message
 from pyrogram.enums import ChatAction, ParseMode
 from pyrogram import filters
-from UTTAM import API_KEY
+from config import API_KEY
 
 BASE_URL = "https://api.together.xyz/v1/chat/completions"
 
