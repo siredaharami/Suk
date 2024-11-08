@@ -5,10 +5,10 @@ from pyrogram.enums import ChatAction, ParseMode
 from pyrogram import filters
 
 # Your AIML API Key
-API_KEY = "2ef61674b85143f8a54c7ab3e581d160"  # Replace with your actual API key from aimlapi.com
+API_KEY = "e4de6eec07ad405390a630ddb65c6c38"  # Replace with your actual API key from aimlapi.com
 
-# Base URL for AIML API (make sure this is correct)
-API_URL = "https://aimlapi.com/api/v1/query"
+# Base URL for AIML API
+API_URL = "https://api.aimlapi.com/v1/query"  # Correct endpoint
 
 @app.on_message(
     filters.command(
@@ -31,14 +31,18 @@ async def chat_gpt(bot, message):
             query = message.text.split(' ', 1)[1]
             print("Input query:", query)  # Debug input
 
-            # Make a GET request to the AIML API (change from POST to GET)
+            # Make a POST request to the AIML API with query in the body
             headers = {
                 "Authorization": f"Bearer {API_KEY}",
                 "Content-Type": "application/json"
             }
 
-            # Make the request
-            response = requests.get(API_URL, params={"query": query}, headers=headers)
+            data = {
+                "query": query
+            }
+
+            # Send the request
+            response = requests.post(API_URL, json=data, headers=headers)
 
             # Debugging: print raw response
             print("API Response Text:", response.text)  # Print raw response
