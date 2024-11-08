@@ -4,11 +4,11 @@ from pyrogram.types import Message
 from pyrogram.enums import ChatAction, ParseMode
 from pyrogram import filters
 
-# Your AIML API Key
+# Define your AIML API Key
 API_KEY = "e4de6eec07ad405390a630ddb65c6c38"  # Replace with your actual API key from aimlapi.com
 
-# Base URL for AIML API
-API_URL = "https://api.aimlapi.com/v1/query"  # Correct endpoint
+# API Base URL (as given in the documentation)
+BASE_URL = "https://api.aimlapi.com"
 
 @app.on_message(
     filters.command(
@@ -31,18 +31,29 @@ async def chat_gpt(bot, message):
             query = message.text.split(' ', 1)[1]
             print("Input query:", query)  # Debug input
 
-            # Make a POST request to the AIML API with query in the body
+            # Define the headers and payload as per the API's documentation
             headers = {
                 "Authorization": f"Bearer {API_KEY}",
                 "Content-Type": "application/json"
             }
 
-            data = {
-                "query": query
+            # Define the payload (messages) as required by the API
+            payload = {
+                "model": "mistralai/Mistral-7B-Instruct-v0.2",  # You can change the model name if needed
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "You are an AI assistant who knows everything."
+                    },
+                    {
+                        "role": "user",
+                        "content": query  # User's query from the message
+                    }
+                ]
             }
 
-            # Send the request
-            response = requests.post(API_URL, json=data, headers=headers)
+            # Make the POST request to the AIML API
+            response = requests.post(f"{BASE_URL}/v1/chat/completions", json=payload, headers=headers)
 
             # Debugging: print raw response
             print("API Response Text:", response.text)  # Print raw response
@@ -59,14 +70,15 @@ async def chat_gpt(bot, message):
                     response_data = response.json()
                     print("API Response JSON:", response_data)  # Debug response JSON
 
-                    if "response" not in response_data:
-                        await message.reply_text("❍ ᴇʀʀᴏʀ: API response mein 'response' key nahi mili.")
-                    else:
-                        result = response_data["response"]
+                    # Get the assistant's response from the JSON data
+                    if "choices" in response_data and len(response_data["choices"]) > 0:
+                        result = response_data["choices"][0]["message"]["content"]
                         await message.reply_text(
                             f"{result} \n\n❍ᴘᴏᴡᴇʀᴇᴅ ʙʏ➛[ʙʧʙʏ-ᴍᴜsɪᴄ™](https://t.me/BABY09_WORLD)",
                             parse_mode=ParseMode.MARKDOWN
                         )
+                    else:
+                        await message.reply_text("❍ ᴇʀʀᴏʀ: No response from API.")
                 except ValueError:
                     await message.reply_text("❍ ᴇʀʀᴏʀ: Invalid response format.")
     except Exception as e:
