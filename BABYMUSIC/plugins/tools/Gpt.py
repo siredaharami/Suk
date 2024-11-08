@@ -5,10 +5,10 @@ from pyrogram.enums import ChatAction, ParseMode
 from pyrogram import filters
 
 # Define your AIML API Key
-API_KEY = "e4de6eec07ad405390a630ddb65c6c38"  # Replace with your actual API key from aimlapi.com
+API_KEY = "abc921ff654bcf7b3faff8f775d781d8d27d32bfd02d6692eea30249ba781c8b"  # अपना API key यहाँ डालें
 
-# API Base URL (as given in the documentation)
-BASE_URL = "https://api.aimlapi.com"
+# API Base URL
+BASE_URL = "https://api.together.xyz/v1/chat/completions"
 
 @app.on_message(
     filters.command(
@@ -31,29 +31,25 @@ async def chat_gpt(bot, message):
             query = message.text.split(' ', 1)[1]
             print("Input query:", query)  # Debug input
 
-            # Define the headers and payload as per the API's documentation
+            # Set up headers with Authorization and Content-Type
             headers = {
                 "Authorization": f"Bearer {API_KEY}",
                 "Content-Type": "application/json"
             }
 
-            # Define the payload (messages) as required by the API
+            # Prepare the payload with the correct model and user message
             payload = {
-                "model": "mistralai/Mistral-7B-Instruct-v0.2",  # You can change the model name if needed
+                "model": "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",  # Change model if needed
                 "messages": [
                     {
-                        "role": "system",
-                        "content": "You are an AI assistant who knows everything."
-                    },
-                    {
                         "role": "user",
-                        "content": query  # User's query from the message
+                        "content": query  # User's question from the message
                     }
                 ]
             }
 
-            # Make the POST request to the AIML API
-            response = requests.post(f"{BASE_URL}/v1/chat/completions", json=payload, headers=headers)
+            # Send the POST request to the API
+            response = requests.post(BASE_URL, json=payload, headers=headers)
 
             # Debugging: print raw response
             print("API Response Text:", response.text)  # Print raw response
