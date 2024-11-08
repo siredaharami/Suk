@@ -1,10 +1,6 @@
-import os
-import random
-import time
 import requests
 from BABYMUSIC import app
 from pyrogram.types import Message
-from pyrogram.types import InputMediaPhoto
 from pyrogram.enums import ChatAction, ParseMode
 from pyrogram import filters
 
@@ -47,20 +43,30 @@ async def chat_gpt(bot, message):
 
             # Send the request to the AIML API
             response = requests.post(API_URL, json=data, headers=headers)
-            response_data = response.json()
 
-            print("API Response:", response_data)  # Debug API response
+            # Debugging: print raw response
+            print("API Response Text:", response.text)  # Print raw response
+            print("Status Code:", response.status_code)  # Check the status code
 
-            if response.status_code != 200 or "response" not in response_data:
-                await message.reply_text("❍ ᴇʀʀᴏʀ: API se koi data nahi mil raha hai.")
+            # If the response is empty or not successful, handle the error
+            if response.status_code != 200 or not response.text.strip():
+                await message.reply_text("❍ ᴇʀʀᴏʀ: API se koi valid data nahi mil raha hai.")
             else:
-                # Extract the result and send it as a reply
-                result = response_data["response"]
-                await message.reply_text(
-                    f"{result} \n\n❍ᴘᴏᴡᴇʀᴇᴅ ʙʏ➛[ʙʧʙʏ-ᴍᴜsɪᴄ™](https://t.me/BABY09_WORLD)",
-                    parse_mode=ParseMode.MARKDOWN
-                )
+                # Attempt to parse the JSON response
+                try:
+                    response_data = response.json()
+                    print("API Response JSON:", response_data)  # Debug response JSON
 
+                    if "response" not in response_data:
+                        await message.reply_text("❍ ᴇʀʀᴏʀ: API response mein 'response' key nahi mili.")
+                    else:
+                        result = response_data["response"]
+                        await message.reply_text(
+                            f"{result} \n\n❍ᴘᴏᴡᴇʀᴇᴅ ʙʏ➛[ʙʧʙʏ-ᴍᴜsɪᴄ™](https://t.me/BABY09_WORLD)",
+                            parse_mode=ParseMode.MARKDOWN
+                        )
+                except ValueError:
+                    await message.reply_text("❍ ᴇʀʀᴏʀ: Invalid response format.")
     except Exception as e:
-        # Catch any exceptions and send an error message
+        # Catch any other exceptions and send an error message
         await message.reply_text(f"**❍ ᴇʀʀᴏʀ: {e} ")
