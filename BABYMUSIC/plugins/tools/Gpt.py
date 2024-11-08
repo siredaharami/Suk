@@ -3,11 +3,8 @@ from BABYMUSIC import app
 from pyrogram.types import Message
 from pyrogram.enums import ChatAction, ParseMode
 from pyrogram import filters
+from CHATGPT.BABYAPI import API_KEY
 
-# Define your AIML API Key
-API_KEY = "abc921ff654bcf7b3faff8f775d781d8d27d32bfd02d6692eea30249ba781c8b"  # अपना API key यहाँ डालें
-
-# API Base URL
 BASE_URL = "https://api.together.xyz/v1/chat/completions"
 
 @app.on_message(
