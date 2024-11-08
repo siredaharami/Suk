@@ -7,7 +7,7 @@ from pyrogram import filters
 # Your AIML API Key
 API_KEY = "2ef61674b85143f8a54c7ab3e581d160"  # Replace with your actual API key from aimlapi.com
 
-# Base URL for AIML API
+# Base URL for AIML API (make sure this is correct)
 API_URL = "https://aimlapi.com/api/v1/query"
 
 @app.on_message(
@@ -31,18 +31,14 @@ async def chat_gpt(bot, message):
             query = message.text.split(' ', 1)[1]
             print("Input query:", query)  # Debug input
 
-            # Make a request to the AIML API
+            # Make a GET request to the AIML API (change from POST to GET)
             headers = {
                 "Authorization": f"Bearer {API_KEY}",
                 "Content-Type": "application/json"
             }
 
-            data = {
-                "query": query
-            }
-
-            # Send the request to the AIML API
-            response = requests.post(API_URL, json=data, headers=headers)
+            # Make the request
+            response = requests.get(API_URL, params={"query": query}, headers=headers)
 
             # Debugging: print raw response
             print("API Response Text:", response.text)  # Print raw response
@@ -50,7 +46,7 @@ async def chat_gpt(bot, message):
 
             # If the response is empty or not successful, handle the error
             if response.status_code != 200:
-                await message.reply_text("❍ ᴇʀʀᴏʀ: API request failed. Status code: " + str(response.status_code))
+                await message.reply_text(f"❍ ᴇʀʀᴏʀ: API request failed. Status code: {response.status_code}")
             elif not response.text.strip():
                 await message.reply_text("❍ ᴇʀʀᴏʀ: API se koi valid data nahi mil raha hai. Response was empty.")
             else:
