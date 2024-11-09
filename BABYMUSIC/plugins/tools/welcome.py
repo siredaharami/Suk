@@ -1,13 +1,13 @@
-from SHUKLAMUSIC import app
+from BABYMUSIC import app
 from pyrogram.errors import RPCError, UserAlreadyParticipant, ChatAdminRequired, InviteRequestSent, UserNotParticipant
 from pyrogram.types import ChatMemberUpdated, InlineKeyboardMarkup, InlineKeyboardButton, Message, ChatJoinRequest
 from pyrogram import Client, filters, enums
 from pyrogram.enums import ParseMode, ChatMemberStatus
 from logging import getLogger
-from SHUKLAMUSIC.utils.database import add_served_chat, get_assistant, is_active_chat
-from SHUKLAMUSIC.utils.Shukla_ban import admin_filter
-from SHUKLAMUSIC.misc import SUDOERS
-from SHUKLAMUSIC.mongo.afkdb import PROCESS
+from BABYMUSIC.utils.database import add_served_chat, get_assistant, is_active_chat
+from BABYMUSIC.utils.Shukla_ban import admin_filter
+from BABYMUSIC.misc import SUDOERS
+from BABYMUSIC.mongo.afkdb import PROCESS
 import asyncio
 import random
 import os
