@@ -81,7 +81,13 @@ async def greet_new_member(_, member: ChatMemberUpdated):
     if member.new_chat_member and not member.old_chat_member and member.new_chat_member.status != "kicked":
         try:
             # Send a welcome message with user details
-            welcome_message = f"Welcome {user.first_name} to {member.chat.title}! Your ID: {user.id}\nTotal members: {count}"
+            welcome_message = f"👋 {user.first_name}, welcome to {member.chat.title}!
+
+🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+
+• I hope you are doing well!
+• Please always follow the group rules!
+\nTotal members: {count}"
             await app.send_message(
                 chat_id,
                 welcome_message
