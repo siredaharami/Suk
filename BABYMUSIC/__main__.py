@@ -2,8 +2,10 @@ import asyncio
 import importlib
 from flask import Flask
 from threading import Thread
-from pyrogram import idle
+from pyrogram import Client, idle
 from pytgcalls.exceptions import NoActiveGroupCall
+import requests
+import time
 
 import config
 from BABYMUSIC import LOGGER, app, userbot
@@ -13,7 +15,27 @@ from BABYMUSIC.plugins import ALL_MODULES
 from BABYMUSIC.utils.database import get_banned_users, get_gbanned
 from config import BANNED_USERS
 
+# Flask app setup
+flask_app = Flask(__name__)
 
+@flask_app.route('/')
+def home():
+    return "Hello, this is BABYMUSIC server!"
+
+def run_flask():
+    flask_app.run(host='0.0.0.0', port=8000)
+
+# Keep-alive function to ping the server at regular intervals
+def keep_alive():
+    while True:
+        try:
+            # You can modify this to your preferred URL for keep-alive
+            requests.get("https://<app_name>.onrender.com")
+        except Exception as e:
+            print(f"Ping error: {e}")
+        time.sleep(300)  # Ping every 5 minutes 
+
+# Async bot initialization
 async def init():
     if all(not getattr(config, f'STRING{i}', None) for i in range(1, 6)):
         LOGGER(__name__).error("𝐒𝐭𝐫𝐢𝐧𝐠 𝐒𝐞𝐬𝐬𝐢𝐨𝐧 𝐍𝐨𝐭 𝐅𝐢𝐥𝐥𝐞𝐝, 𝐏𝐥𝐞𝐚𝐬𝐞 𝐅𝐢𝐥𝐥 𝐀 𝐏𝐲𝐫𝐨𝐠𝐫𝐚𝐦 𝐒𝐞𝐬𝐬𝐢𝐨𝐧")
@@ -47,28 +69,28 @@ async def init():
     await BABY.decorators()
     LOGGER("BABYMUSIC").info("╔═════ஜ۩۞۩ஜ════╗\n  ☠︎︎𝗠𝗔𝗗𝗘 𝗕𝗬 𝗠𝗥 𝗨𝗧𝗧𝗔𝗠★𝗥𝗔𝗧𝗛𝗢𝗥𝗘\n╚═════ஜ۩۞۩ஜ════╝")
     
-    # Instead of idle(), we can use a manual loop to keep it running
     while True:
         await asyncio.sleep(3600)  # Keep the event loop alive
 
 
-def start_flask():
-    flask_app = Flask(__name__)
-
-    @flask_app.route('/')
-    def home():
-        return "Hello, this is BABYMUSIC server!"
-
-    flask_app.run(host='0.0.0.0', port=8000)
-
-
 if __name__ == "__main__":
-    # Start the bot and Flask server
+    # Start the Flask server in a separate thread
+    flask_thread = Thread(target=run_flask)
+    flask_thread.daemon = True  # This ensures the thread ends when the main program exits
+    flask_thread.start()
+
+    # Start the keep-alive function in a separate thread
+    keep_alive_thread = Thread(target=keep_alive)
+    keep_alive_thread.daemon = True
+    keep_alive_thread.start()
+
+    # Start the bot in the main thread using asyncio
     bot_loop = asyncio.get_event_loop()
 
     # Run bot initialization in a thread
     bot_thread = Thread(target=lambda: bot_loop.run_until_complete(init()))
+    bot_thread.daemon = True  # This ensures the thread ends when the main program exits
     bot_thread.start()
 
-    # Start Flask server in the main thread
-    start_flask()
+    # Keep the main thread alive so the bot, Flask, and keep-alive functions can run
+    bot_loop.run_forever()
