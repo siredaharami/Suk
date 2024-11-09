@@ -58,10 +58,8 @@ async def auto_state(_, message):
                 await message.reply_text(f"**ᴅɪsᴀʙʟᴇᴅ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ ɪɴ** {message.chat.title}")
         elif state == "on":
             if not A:
-                await message.reply_text("**ᴇɴᴀʙʟᴇ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ.**")
-            else:
-                await wlcm.rm_wlcm(chat_id)
-                await message.reply_text(f"**ᴇɴᴀʙʟᴇᴅ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ ɪɴ ** {message.chat.title}")
+                await wlcm.add_wlcm(chat_id)  # Corrected from rm_wlcm to add_wlcm for "on"
+                await message.reply_text(f"**ᴇɴᴀʙʟᴇᴅ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ ɪɴ** {message.chat.title}")
         else:
             await message.reply_text(usage)
     else:
@@ -72,6 +70,8 @@ async def greet_new_member(_, member: ChatMemberUpdated):
     chat_id = member.chat.id
     count = await app.get_chat_members_count(chat_id)
     A = await wlcm.find_one(chat_id)
+
+    # If the welcome message is disabled for the chat, do nothing
     if A:
         return
 
@@ -81,16 +81,11 @@ async def greet_new_member(_, member: ChatMemberUpdated):
     if member.new_chat_member and not member.old_chat_member and member.new_chat_member.status != "kicked":
         try:
             # Send a welcome message with user details
-            welcome_message = f"👋 {user.first_name}, welcome to {member.chat.title}!
-
-🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
-
-• I hope you are doing well!
-• Please always follow the group rules!
-\nTotal members: {count}"
-            await app.send_message(
-                chat_id,
-                welcome_message
-            )
+            welcome_message = f"👋 {user.first_name}, welcome to {member.chat.title}!\n\n" \
+                              "🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸\n\n" \
+                              "• I hope you are doing well!\n" \
+                              "• Please always follow the group rules!\n\n" \
+                              f"Total members: {count}"
+            await app.send_message(chat_id, welcome_message)
         except Exception as e:
-            LOGGER.error(e)
+            LOGGER.error(f"Error sending welcome message: {e}")
