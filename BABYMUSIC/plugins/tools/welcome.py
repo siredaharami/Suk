@@ -42,20 +42,24 @@ async def auto_state(_, message):
     usage = "**ᴜsᴀɢᴇ:**\n**⦿ /welcome [on|off]**"
     if len(message.command) == 1:
         return await message.reply_text(usage)
+    
     chat_id = message.chat.id
     user = await app.get_chat_member(message.chat.id, message.from_user.id)
+    
     if user.status in (
         enums.ChatMemberStatus.ADMINISTRATOR,
         enums.ChatMemberStatus.OWNER,
     ):
         A = await wlcm.find_one(chat_id)
         state = message.text.split(None, 1)[1].strip().lower()
+        
         if state == "off":
             if A:
                 await message.reply_text("**ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ ᴀʟʀᴇᴀᴅʏ ᴅɪsᴀʙʟᴇᴅ !**")
             else:
                 await wlcm.add_wlcm(chat_id)
                 await message.reply_text(f"**ᴅɪsᴀʙʟᴇᴅ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ ɪɴ** {message.chat.title}")
+        
         elif state == "on":
             if not A:
                 await wlcm.add_wlcm(chat_id)  # Corrected from rm_wlcm to add_wlcm for "on"
@@ -75,24 +79,30 @@ async def greet_new_member(_, member: ChatMemberUpdated):
     if A:
         return
 
-    user = member.new_chat_member.user if member.new_chat_member else member.from_user
+    user = None
+    if member.new_chat_member:
+        user = member.new_chat_member.user
+    elif member.old_chat_member:
+        user = member.old_chat_member.user
+    
+    if not user:
+        return  # Exit if no user found in the update
+    
+    try:
+        # Welcome message
+        welcome_message = f"👋 {user.first_name}, Wᴇʟᴄᴏᴍᴇ Tᴏ {member.chat.title}!\n\n" \
+                          "• I Hᴏᴘᴇ Yᴏᴜ Aʀᴇ Fɪɴᴇ!\n\n" \
+                          "• Pʟᴇᴀsᴇ Aʟᴡᴀʏs Fᴏʟʟᴏᴡ Tʜᴇ Gʀᴏᴜᴘ Rᴜʟᴇs!\n" \
+                          "────────────────────\n" \
+                          f"ᴛ ᴏ ᴛ ᴀ ʟ ᴍ ᴇ ᴍ ʙ ᴇ ʀ: {count}\n" \
+                          "────────────────────"
+        
+        # Creating an inline button to "Join 👋" with the link
+        keyboard = InlineKeyboardMarkup(
+            [[InlineKeyboardButton("Join 👋", url="https://t.me/BABY09_WORLD")]]
+        )
 
-    # Only send text greeting, no photo
-    if member.new_chat_member and not member.old_chat_member and member.new_chat_member.status != "kicked":
-        try:
-            # Welcome message
-            welcome_message = f"👋 {user.first_name}, Wᴇʟᴄᴏᴍᴇ Tᴏ {member.chat.title}!\n\n" \
-                              "• I Hᴏᴘᴇ Yᴏᴜ Aʀᴇ Fɪɴᴇ!\n\n" \
-                              "• Pʟᴇᴀsᴇ Aʟᴡᴀʏs Fᴏʟʟᴏᴡ Tʜᴇ Gʀᴏᴜᴘ Rᴜʟᴇs!\n" \
-                              "────────────────────"
-                              "ᴛ ᴏ ᴛ ᴀ ʟ  ᴍ ᴇ ᴍ ʙ ᴇ ʀ: {count}"
-                              f"────────────────────"
-            # Creating an inline button to "Join 👋" with the link
-            keyboard = InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Join 👋", url="https://t.me/BABY09_WORLD")]]
-            )
-
-            # Send the welcome message with the inline button
-            await app.send_message(chat_id, welcome_message, reply_markup=keyboard)
-        except Exception as e:
-            LOGGER.error(f"Error sending welcome message: {e}")
+        # Send the welcome message with the inline button
+        await app.send_message(chat_id, welcome_message, reply_markup=keyboard)
+    except Exception as e:
+        LOGGER.error(f"Error sending welcome message: {e}")
