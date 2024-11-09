@@ -80,12 +80,18 @@ async def greet_new_member(_, member: ChatMemberUpdated):
     # Only send text greeting, no photo
     if member.new_chat_member and not member.old_chat_member and member.new_chat_member.status != "kicked":
         try:
-            # Send a welcome message with user details
-            welcome_message = f"👋 {user.first_name}, welcome to {member.chat.title}!\n\n" \
-                              "🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸\n\n" \
-                              "• I hope you are doing well!\n" \
-                              "• Please always follow the group rules!\n\n" \
-                              f"Total members: {count}"
-            await app.send_message(chat_id, welcome_message)
+            # Welcome message
+            welcome_message = f"👋 {user.first_name}, Wᴇʟᴄᴏᴍᴇ Tᴏ {member.chat.title}!\n\n" \
+                              "• I Hᴏᴘᴇ Yᴏᴜ Aʀᴇ Fɪɴᴇ!\n\n" \
+                              "• Pʟᴇᴀsᴇ Aʟᴡᴀʏs Fᴏʟʟᴏᴡ Tʜᴇ Gʀᴏᴜᴘ Rᴜʟᴇs!\n\n" \
+                              f"ᴛ ᴏ ᴛ ᴀ ʟ  ᴍ ᴇ ᴍ ʙ ᴇ ʀ: {count}"
+
+            # Creating an inline button to "Join 👋" with the link
+            keyboard = InlineKeyboardMarkup(
+                [[InlineKeyboardButton("Join 👋", url="https://t.me/BABY09_WORLD")]]
+            )
+
+            # Send the welcome message with the inline button
+            await app.send_message(chat_id, welcome_message, reply_markup=keyboard)
         except Exception as e:
             LOGGER.error(f"Error sending welcome message: {e}")
