@@ -12,7 +12,7 @@ load_dotenv()
 API_ID = int(getenv("API_ID", "16457832"))
 API_HASH = getenv("API_HASH", "3030874d0befdb5d05597deacc3e83ab")
 # ------------------------------------------------------
-BOT_TOKEN = getenv("BOT_TOKEN", "7893206132:AAFGyY9c42swoemxygVY56SvG9NsuLXlHqQ")
+BOT_TOKEN = getenv("BOT_TOKEN", "")
 # -------------------------------------------------------
 OWNER_USERNAME = getenv("OWNER_USERNAME","@UTTAM470")
 # --------------------------------------------------------
@@ -28,7 +28,7 @@ API_KEY = "abc921ff654bcf7b3faff8f775d781d8d27d32bfd02d6692eea30249ba781c8b"  # 
 
 #---------------------------------------------------------------
 #---------------------------------------------------------------
-MONGO_DB_URI = getenv("MONGO_DB_URI", "mongodb+srv://TEAMBABY70:TEAMBABY70@uttam1.vl2e8.mongodb.net/?retryWrites=true&w=majority&appName=UTTAM1")
+MONGO_DB_URI = getenv("MONGO_DB_URI", "")
 #---------------------------------------------------------------
 #---------------------------------------------------------------
 
