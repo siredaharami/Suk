@@ -12,7 +12,7 @@ load_dotenv()
 API_ID = int(getenv("API_ID", "16457832"))
 API_HASH = getenv("API_HASH", "3030874d0befdb5d05597deacc3e83ab")
 # ------------------------------------------------------
-BOT_TOKEN = getenv("BOT_TOKEN", "")
+BOT_TOKEN = getenv("BOT_TOKEN", "7638229482:AAHmvpFaVQzInvrGsBMlotrHmpnzQwwPhAk")
 # -------------------------------------------------------
 OWNER_USERNAME = getenv("OWNER_USERNAME","@UTTAM470")
 # --------------------------------------------------------
@@ -28,7 +28,7 @@ API_KEY = "abc921ff654bcf7b3faff8f775d781d8d27d32bfd02d6692eea30249ba781c8b"  # 
 
 #---------------------------------------------------------------
 #---------------------------------------------------------------
-MONGO_DB_URI = getenv("MONGO_DB_URI", "")
+MONGO_DB_URI = getenv("MONGO_DB_URI", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09@cluster0.vmjl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 #---------------------------------------------------------------
 #---------------------------------------------------------------
 
@@ -119,7 +119,7 @@ TG_VIDEO_FILESIZE_LIMIT = int(getenv("TG_VIDEO_FILESIZE_LIMIT", "5242880000"))
 # ------------------------------------
 # ------------------------------------
 # ------------------------------------
-STRING1 = getenv("STRING_SESSION", "")
+STRING1 = getenv("STRING_SESSION", "BQCZzqEAqxj24WJHbfak65HnGzrayYah9-iT_rCywzJyoNAIjEBW3EMqYOvyVu2JrIvMywL2WFBPEETYl7ZGL0j1yGbSuNvd7wFaj_wjkJsU3XWZScc0ULPu6LTDr9nCqgvZpFQTBWmijbCoqO0cl8liSEUUb-kxEhB7LFs8WRjUkIxP244Jdjy13cal4GgaQPZ6POwAiJDTAbhFnhxwws7dfYbJdZT5kMe_DLbvtnfPB2uDuQgAUry7lS6j1zz2-pKqU4swDIzY_nyVglamc4gu0QRWjlow2RPkFWTdHOaYkGrEx8ZutQPlCoMfeY_plk-L4FvomzSaJwifrPXy1iOkzaIfTgAAAAGCXgzzAA")
 BANNED_USERS = filters.user()
 adminlist = {}
 lyrical = {}
